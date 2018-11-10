@@ -36,8 +36,14 @@ public interface SecureDataContainer<E> {
     
     //Restituisce un iteratore (senza remove) che genera tutti i dati
     //dell'utente in ordine arbitrario se vengono rispettati i controlli di
-    //qualità
+    //identità
     public Iterator<E> getIterator(String owner, String passw);
+    
+    //Verifica che l'utente indicato e la password indicata corrispondano
+    public boolean verifyUser(String user, String passw);
+    
+    //Verifica che l'utente indicato abbia i permessi per accedere ai dati
+    public boolean verifyOwnership(String user, String passw, E data);
     
     //...altre operazioni da definire a scelta
 }
