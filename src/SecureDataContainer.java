@@ -6,44 +6,86 @@ import java.util.Iterator;
  * @param <E> il tipo degli oggetti contenuti
  */
 public interface SecureDataContainer<E> {
+    //OVERVIEW: Gli oggetti di tipo SecureDataContainer sono collezioni
+    //modificabili di oggetti di tipo E
     
     //Crea l'identità di un nuovo utente della collezione
     public void createUser(String id, String passw);
+    //REQUIRES: id e passw non NULL
+    //EFFECTS: inserisce il nuovo utente nella lista degli utenti e la
+    //corrispondente password assegnata
+    //MODIFIES: la lista degli utenti
     
     //Restituisce il numero degli elementi di un utente presenti nella
     //collezione
     public int getSize(String owner, String passw);
+    //REQUIRES: owner e passw che siano utente e password corrispondente di un
+    //utente esistente
+    //RETURNS: il numero di elementi della collezione di owner
     
     //Inserisce il valore del dato nella collezione se vengono rispettati i
     //controlli di identità
     public boolean put(String owner, String passw, E data);
+    //REQUIRES: owner e passw che siano utente e password corrispondente di un
+    //utente esistente e data che sia un dato valido non NULL
+    //EFFECTS: inserisce data all'interno della collezione di owner
+    //MODIFIES: la collezione di owner
+    //RETURNS: true se data è stato aggiunto correttamente, false altrimenti
     
     //Ottiene una copia del valore del dato nella collezione se vengono
     //rispettati i controlli di identità
     public E get(String owner, String passw, E data);
+    //REQUIRES: owner e passw che siano utente e password corrispondente di un
+    //utente esistente e data che sia un dato valido non NULL
+    //RETURNS: NULL se il dato non è presente o una copia di data altrimenti
     
     //Rimuove il dato dalla collezione se vengono rispettati i controlli di
     //identità
     public E remove(String owner, String passw, E data);
+    //REQUIRES: owner e passw che siano utente e password corrispondente di un
+    //utente esistente
+    //EFFECTS: rimuove la prima occorrenza di data dalla collezione di owner
+    //MODIFIES: la collezione di owner
+    //RETURNS: data se il dato è stato rimosso correttamente, NULL altrimenti
     
     //Crea una copia del dato nella collezione se vengono rispettati i controlli
     //di identità
     public void copy(String owner, String passw, E data);
+    //REQUIRES: owner e passw che siano utente e password corrispondente di un
+    //utente esistente e data valido e non NULL
+    //EFFECTS: viene effettuata una copia di data all'interno della collezione
+    //di owner e inserita in fondo alla collezione
+    //MODIFIES: la collezione di owner
     
     //Condivide il dato nella collezione con un altro utente se vengono
     //rispettati i controlli di identità
     public void share(String owner, String passw, String other, E data);
+    //REQUIRES: owner e passw che siano utente e password corrispondente di un
+    //utente esistente e other che sia un altro utente esistente e data valido
+    //e non NULL
+    //EFFECTS: viene effettuata una copia di data all'interno della collezione
+    //di other e messa in fondo alla collezione
+    //MODIFIES: la collezione di other
     
     //Restituisce un iteratore (senza remove) che genera tutti i dati
     //dell'utente in ordine arbitrario se vengono rispettati i controlli di
     //identità
     public Iterator<E> getIterator(String owner, String passw);
+    //REQUIRES: owner e passw che siano utente e password corrispondente di un
+    //utente esistente
+    //RETURNS: un oggetto Iterator<E> sulla collezione di owner
     
     //Verifica che l'utente indicato e la password indicata corrispondano
     public boolean verifyUser(String user, String passw);
+    //REQUIRES: user e passw non NULL
+    //RETURNS: true se l'utente user esiste con password passw, false altrimenti
     
     //Verifica che l'utente indicato abbia i permessi per accedere ai dati
     public boolean verifyOwnership(String user, String passw, E data);
+    //REQUIRES: owner e passw che siano utente e password corrispondente di un
+    //utente esistente e data non NULL
+    //RETURNS: true se l'oggetto data appartiene all'utente user, false
+    //altrimenti
     
     //...altre operazioni da definire a scelta
 }
