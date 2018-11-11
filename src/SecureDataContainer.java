@@ -8,6 +8,9 @@ import java.util.Iterator;
 public interface SecureDataContainer<E> {
     //OVERVIEW: Gli oggetti di tipo SecureDataContainer sono collezioni
     //modificabili di oggetti di tipo E
+    //TYPICAL ELEMENT: <usr-i, pwd-i, <E-elem-0, ..., E-elem-n>> con
+    //0<=i<=data.getSize() e n=data.getUser(usr-i, pwd-i).getSize() e
+    //i!=j => (usr-i)!=(usr-j)
     
     //Crea l'identità di un nuovo utente della collezione
     public void createUser(String id, String passw);
