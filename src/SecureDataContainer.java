@@ -136,4 +136,22 @@ public interface SecureDataContainer<E> {
     //RETURNS: il numero di dati dell'utente, -1 se l'utente non esiste
 
     //...altre operazioni da definire a scelta
+    
+    class UserNotFoundException extends Exception {
+        public UserNotFoundException() {
+            super();
+        }
+    }
+    
+    class InvalidPasswordException extends Exception {
+        public InvalidPasswordException() {
+            super();
+        }
+    }
+    
+    class InvalidDataException extends Exception {
+        public InvalidDataException() {
+            super();
+        }
+    }
 }
