@@ -130,6 +130,9 @@ public interface SecureDataContainer<E> {
     //Ritorna il numero di dati dell'utente indicato
     public int getDataN(String user, String passw);
     //REQUIRES: user e passw utente valido non NULL
+    //THROWS: NullPointerException (unchecked, Java) se id o passw sono NULL,
+    //UserNotFoundException (unchecked, non Java) se l'utente non esiste,
+    //InvalidPasswordException (unchecked, non Java) se la password è sbagliata,
     //RETURNS: il numero di dati dell'utente, -1 se l'utente non esiste
 
     //...altre operazioni da definire a scelta
