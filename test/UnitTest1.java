@@ -40,6 +40,7 @@ public class UnitTest1 {
     }
     
     public void printData() {
+        System.out.println("====================");
         try {
             System.out.print("fexed: ");
             for (Iterator i = dataContainer.getIterator("fexed", "abc123"); i.hasNext(); ) {
@@ -94,7 +95,6 @@ public class UnitTest1 {
             assertEquals(dataContainer.getUsersN(), 5);}
     }
     
-    @Test
     public void addData() {
         addUsers();
         try {
@@ -154,6 +154,7 @@ public class UnitTest1 {
         } catch (SecureDataContainer.InvalidPasswordException ex) {
             fail("InvalidPasswordException sul quarto try");
         } catch (SecureDataContainer.InvalidDataException ex) {}
+        printData();
     }
     
     @Test
@@ -162,6 +163,13 @@ public class UnitTest1 {
         try {
             dataContainer.share("fexed", "abc123", "dexef", "lasagna");
             assertEquals(dataContainer.getDataN("dexef", "321cba"), 5);
+            dataContainer.remove("dexef", "321cba", "stringapiulunga");
+            assertEquals(dataContainer.getDataN("dexef", "321cba"), 4);
+            dataContainer.share("fexed", "abc123", "dexef", "lasagna");
+            dataContainer.share("fexed", "abc123", "dexef", "lasagna");
+            dataContainer.share("fexed", "abc123", "dexef", "lenovo");
+            dataContainer.remove("dexef", "321cba", "lasagna");
+            assertEquals(dataContainer.getDataN("dexef", "321cba"), 6);
         } catch (SecureDataContainer.UserNotFoundException ex) {
             fail("UserNotFoundException");
         } catch (SecureDataContainer.InvalidPasswordException ex) {
