@@ -7,11 +7,11 @@ import java.util.List;
  * Implementazione di SecureDataContainer.java con String
  * @author Federico Matteoni
  */
-public class StringSecureDataContainer implements SecureDataContainer<String> {
+public class HashMapStringSecureDataContainer implements SecureDataContainer<String> {
     private HashMap<String, Integer> usrPwd;
     private HashMap<String, ArrayList<String>> usrData;
         
-    public StringSecureDataContainer() {
+    public HashMapStringSecureDataContainer() {
         this.usrPwd = new HashMap();
         this.usrData = new HashMap();
     }

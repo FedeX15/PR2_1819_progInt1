@@ -15,7 +15,7 @@ public class UnitTest1 {
     SecureDataContainer<String> dataContainer;
     
     public UnitTest1() {
-        this.dataContainer = new StringSecureDataContainer();
+        this.dataContainer = new HashMapStringSecureDataContainer();
     }
     
     @BeforeClass
