@@ -1,3 +1,4 @@
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.After;
@@ -36,6 +37,40 @@ public class UnitTest1 {
     public void testAlfa() {
         addUsers();
         addData();
+    }
+    
+    public void printData() {
+        try {
+            System.out.print("fexed: ");
+            for (Iterator i = dataContainer.getIterator("fexed", "abc123"); i.hasNext(); ) {
+                System.out.print(i.next()+"|");
+            }
+            System.out.println("");
+            System.out.print("dexef: ");
+            for (Iterator i = dataContainer.getIterator("dexef", "321cba"); i.hasNext(); ) {
+                System.out.print(i.next()+"|");
+            }
+            System.out.println("");
+            System.out.print("arduino: ");
+            for (Iterator i = dataContainer.getIterator("arduino", "nano"); i.hasNext(); ) {
+                System.out.print(i.next()+"|");
+            }
+            System.out.println("");
+            System.out.print("raspberry: ");
+            for (Iterator i = dataContainer.getIterator("raspberry", "3.14159265"); i.hasNext(); ) {
+                System.out.print(i.next()+"|");
+            }
+            System.out.println("");
+            System.out.print("temistocle: ");
+            for (Iterator i = dataContainer.getIterator("temistocle", "nonsaprei"); i.hasNext(); ) {
+                System.out.print(i.next()+"|");
+            }
+            System.out.println("");
+        } catch (SecureDataContainer.UserNotFoundException ex) {
+            fail("UserNotFoundException");
+        } catch (SecureDataContainer.InvalidPasswordException ex) {
+            fail("InvalidPasswordException");
+        }
     }
 
     @Test
@@ -111,8 +146,6 @@ public class UnitTest1 {
             fail("InvalidPasswordException sul terzo try");
         }
         
-        
-        
         try {
             dataContainer.put("fexed", "abc123", "");
             fail("Utente fexed non ha dato InvalidDataException sul quarto try");
@@ -121,5 +154,23 @@ public class UnitTest1 {
         } catch (SecureDataContainer.InvalidPasswordException ex) {
             fail("InvalidPasswordException sul quarto try");
         } catch (SecureDataContainer.InvalidDataException ex) {}
+    }
+    
+    @Test
+    public void shareData() {
+        addData();
+        try {
+            dataContainer.share("fexed", "abc123", "dexef", "lasagna");
+            assertEquals(dataContainer.getDataN("dexef", "321cba"), 5);
+        } catch (SecureDataContainer.UserNotFoundException ex) {
+            fail("UserNotFoundException");
+        } catch (SecureDataContainer.InvalidPasswordException ex) {
+            fail("InvalidPasswordException");
+        } catch (SecureDataContainer.InvalidDataException ex) {
+            fail("InvalidDataException");
+        } catch(SecureDataContainer.DataNotOwnedException ex) {
+            fail("InvalidDataException");  
+        }
+        printData();
     }
 }
