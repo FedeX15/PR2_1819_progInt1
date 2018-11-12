@@ -1,3 +1,5 @@
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -30,8 +32,13 @@ public class UnitTest1 {
     @After
     public void tearDown() {
     }
-
+    
     @Test
+    public void testAlfa() {
+        addUsers();
+        addData();
+    }
+
     public void addUsers() {
         try {
             dataContainer.createUser("fexed", "abc123");
@@ -44,5 +51,31 @@ public class UnitTest1 {
             dataContainer.createUser("fexed", "asdasd");
             fail("No errore su utente che non va bene");
         } catch (SecureDataContainer.InvalidUserException ex) {}
+    }
+    
+    public void addData() {
+        try {
+            dataContainer.put("fexed", "abc123", "prova");
+            dataContainer.put("fexed", "abc123", "termometro");
+            dataContainer.put("dexef", "321cba", "gabbiano");
+        } catch (SecureDataContainer.UserNotFoundException ex) {
+            fail("UserNotFoundException sul primo try");
+        } catch (SecureDataContainer.InvalidPasswordException ex) {
+            fail("InvalidPasswordException sul primo try");
+        } catch (SecureDataContainer.InvalidDataException ex) {
+            fail("InvalidDataException sul primo try");
+        }
+        
+        try {
+            dataContainer.put("asd", "asd", "pippo");
+            fail("Utente asd non ha dato UserNotFoundException sul secondo try");
+        } catch (SecureDataContainer.UserNotFoundException ex) {
+        } catch (SecureDataContainer.InvalidPasswordException ex) {
+            fail("InvalidPasswordException sul secondo try");
+        } catch (SecureDataContainer.InvalidDataException ex) {
+            fail("InvalidPasswordException sul secondo try");
+        }
+        
+        
     }
 }

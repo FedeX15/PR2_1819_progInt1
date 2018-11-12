@@ -1,5 +1,7 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Implementazione di SecureDataContainer.java con String
@@ -7,11 +9,11 @@ import java.util.Iterator;
  */
 public class StringSecureDataContainer implements SecureDataContainer<String> {
     private HashMap<String, String> usrPwd;
-    private HashMap<String, String> dataUsr;
+    private HashMap<String, List<String>> usrData;
         
     public StringSecureDataContainer() {
         this.usrPwd = new HashMap();
-        this.dataUsr = new HashMap();
+        this.usrData = new HashMap();
     }
 
     @Override
@@ -19,6 +21,7 @@ public class StringSecureDataContainer implements SecureDataContainer<String> {
         if (id != null && passw != null) {
             if (!(usrPwd.containsKey(id))) {
                 usrPwd.put(id, passw);
+                usrData.put(id, new ArrayList<>());
             } else throw new InvalidUserException();
         } else throw new NullPointerException();
     }
@@ -28,22 +31,40 @@ public class StringSecureDataContainer implements SecureDataContainer<String> {
         if (owner != null && passw != null) {
             if (usrPwd.containsKey(owner)) {
                 if (usrPwd.get(owner).equals(passw)) {
-                    int n = 0;
-                    for (String s : dataUsr.values()) {n++;}
-                    return n;
+                    return usrData.get(owner).size();
                 } else throw new InvalidPasswordException();
             } else throw new UserNotFoundException();
         } else throw new NullPointerException();
     }
 
     @Override
-    public boolean put(String owner, String passw, String data) {
-        throw new UnsupportedOperationException("Non supportato.");
+    public boolean put(String owner, String passw, String data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException {
+        if (owner != null && passw != null && data != null) {
+            if (usrPwd.containsKey(owner)) {
+                if (usrPwd.get(owner).equals(passw)) {
+                    if (!(data.equals(""))) {
+                        usrData.get(owner).add(data);
+                        return true;
+                    } else throw new InvalidDataException();
+                } else throw new InvalidPasswordException();
+            } else throw new UserNotFoundException();
+        } else throw new NullPointerException();
     }
 
     @Override
-    public String get(String owner, String passw, String data) {
-        throw new UnsupportedOperationException("Non supportato.");
+    public String get(String owner, String passw, String data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException {
+        if (owner != null && passw != null && data != null) {
+            if (usrPwd.containsKey(owner)) {
+                if (usrPwd.get(owner).equals(passw)) {
+                    if (!(data.equals(""))) {
+                        for (String s : usrData.get(owner)) {
+                            if (s.equals(data)) return data;
+                        }
+                        throw new DataNotOwnedException();
+                    } else throw new InvalidDataException();
+                } else throw new InvalidPasswordException();
+            } else throw new UserNotFoundException();
+        } else throw new NullPointerException();
     }
 
     @Override
@@ -83,8 +104,10 @@ public class StringSecureDataContainer implements SecureDataContainer<String> {
             if (usrPwd.containsKey(user)) {
                 if (usrPwd.get(user).equals(passw)) {
                     if (!(data.equals(""))) {
-                        if (dataUsr.get(data).equals(user)) return true;
-                        else return false;
+                        for (String s : usrData.get(user)) {
+                            if (s.equals(data)) return true;
+                        }
+                        return false;
                     }
                     else throw new InvalidDataException();
                 } else throw new InvalidPasswordException();
