@@ -159,12 +159,14 @@ public class StringSecureDataContainer implements SecureDataContainer<String> {
 
     @Override
     public int getUsersN() {
-        throw new UnsupportedOperationException("Non supportato.");
+        return usrPwd.size();
     }
 
     @Override
-    public int getDataN(String user, String passw) {
-        throw new UnsupportedOperationException("Non supportato.");
+    public int getDataN(String user, String passw) throws UserNotFoundException, InvalidPasswordException {
+        if (verifyUser(user, passw)) {
+            return usrData.get(user).size();
+        } else return -1;
     }
     
 }

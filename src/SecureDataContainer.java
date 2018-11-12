@@ -56,7 +56,7 @@ public interface SecureDataContainer<E> {
     
     //Rimuove il dato dalla collezione se vengono rispettati i controlli di
     //identità
-    public E remove(String owner, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException;
+    public E remove(String owner, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException;
     //REQUIRES: owner e passw che siano utente e password corrispondente di un
     //utente esistente
     //THROWS: NullPointerException (unchecked, Java) se id o passw sono NULL,
@@ -69,7 +69,7 @@ public interface SecureDataContainer<E> {
     
     //Crea una copia del dato nella collezione se vengono rispettati i controlli
     //di identità
-    public void copy(String owner, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException;
+    public void copy(String owner, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException;
     //REQUIRES: owner e passw che siano utente e password corrispondente di un
     //utente esistente e data valido e non NULL
     //THROWS: NullPointerException (unchecked, Java) se id o passw sono NULL,
@@ -82,7 +82,7 @@ public interface SecureDataContainer<E> {
     
     //Condivide il dato nella collezione con un altro utente se vengono
     //rispettati i controlli di identità
-    public void share(String owner, String passw, String other, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException;
+    public void share(String owner, String passw, String other, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException;
     //REQUIRES: owner e passw che siano utente e password corrispondente di un
     //utente esistente e other che sia un altro utente esistente e data valido
     //e non NULL
