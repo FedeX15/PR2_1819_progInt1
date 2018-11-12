@@ -8,7 +8,7 @@ import java.util.List;
  * @author Federico Matteoni
  */
 public class StringSecureDataContainer implements SecureDataContainer<String> {
-    private HashMap<String, String> usrPwd;
+    private HashMap<String, Integer> usrPwd;
     private HashMap<String, ArrayList<String>> usrData;
         
     public StringSecureDataContainer() {
@@ -20,7 +20,7 @@ public class StringSecureDataContainer implements SecureDataContainer<String> {
     public void createUser(String id, String passw) throws InvalidUserException{
         if (id != null && passw != null) {
             if (!(usrPwd.containsKey(id))) {
-                usrPwd.put(id, passw);
+                usrPwd.put(id, passw.hashCode());
                 usrData.put(id, new ArrayList<>());
             } else throw new InvalidUserException();
         } else throw new NullPointerException();
@@ -30,7 +30,7 @@ public class StringSecureDataContainer implements SecureDataContainer<String> {
     public int getSize(String owner, String passw) throws UserNotFoundException, InvalidPasswordException {
         if (owner != null && passw != null) {
             if (usrPwd.containsKey(owner)) {
-                if (usrPwd.get(owner).equals(passw)) {
+                if (usrPwd.get(owner).equals(passw.hashCode())) {
                     return usrData.get(owner).size();
                 } else throw new InvalidPasswordException();
             } else throw new UserNotFoundException();
@@ -41,7 +41,7 @@ public class StringSecureDataContainer implements SecureDataContainer<String> {
     public boolean put(String owner, String passw, String data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException {
         if (owner != null && passw != null && data != null) {
             if (usrPwd.containsKey(owner)) {
-                if (usrPwd.get(owner).equals(passw)) {
+                if (usrPwd.get(owner).equals(passw.hashCode())) {
                     if (!(data.equals(""))) {
                         usrData.get(owner).add(data);
                         return true;
@@ -55,7 +55,7 @@ public class StringSecureDataContainer implements SecureDataContainer<String> {
     public String get(String owner, String passw, String data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException {
         if (owner != null && passw != null && data != null) {
             if (usrPwd.containsKey(owner)) {
-                if (usrPwd.get(owner).equals(passw)) {
+                if (usrPwd.get(owner).equals(passw.hashCode())) {
                     if (!(data.equals(""))) {
                         for (String s : usrData.get(owner)) {
                             if (s.equals(data)) return data;
@@ -71,7 +71,7 @@ public class StringSecureDataContainer implements SecureDataContainer<String> {
     public String remove(String owner, String passw, String data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException {
         if (owner != null && passw != null && data != null) {
             if (usrPwd.containsKey(owner)) {
-                if (usrPwd.get(owner).equals(passw)) {
+                if (usrPwd.get(owner).equals(passw.hashCode())) {
                     if (!(data.equals(""))) {
                         for (int i = 0; i < usrData.size(); i++) {
                             if (usrData.get(owner).get(i).equals(data)) {
@@ -90,7 +90,7 @@ public class StringSecureDataContainer implements SecureDataContainer<String> {
     public void copy(String owner, String passw, String data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException {
         if (owner != null && passw != null && data != null) {
             if (usrPwd.containsKey(owner)) {
-                if (usrPwd.get(owner).equals(passw)) {
+                if (usrPwd.get(owner).equals(passw.hashCode())) {
                     if (!(data.equals(""))) {
                         if (usrData.get(owner).contains(data)) {
                                 usrData.get(owner).add(data);
@@ -106,7 +106,7 @@ public class StringSecureDataContainer implements SecureDataContainer<String> {
         if (owner != null && passw != null && other != null && data != null) {
             if (usrPwd.containsKey(owner)) {
                 if (usrPwd.containsKey(other)) {
-                    if (usrPwd.get(owner).equals(passw)) {
+                    if (usrPwd.get(owner).equals(passw.hashCode())) {
                         if (!(data.equals(""))) {
                             if (usrData.get(owner).contains(data)) {
                                 usrData.get(other).add(data);
@@ -122,7 +122,7 @@ public class StringSecureDataContainer implements SecureDataContainer<String> {
     public Iterator<String> getIterator(String owner, String passw) throws UserNotFoundException, InvalidPasswordException {
         if (owner != null && passw != null) {
             if (usrPwd.containsKey(owner)) {
-                if (usrPwd.get(owner).equals(passw)) {
+                if (usrPwd.get(owner).equals(passw.hashCode())) {
                     return usrData.get(owner).iterator();
                 } else throw new InvalidPasswordException();
             } else throw new UserNotFoundException();
@@ -133,7 +133,7 @@ public class StringSecureDataContainer implements SecureDataContainer<String> {
     public boolean verifyUser(String user, String passw) throws UserNotFoundException, InvalidPasswordException {
         if (user != null && passw != null) {
             if (usrPwd.containsKey(user)) {
-                if (usrPwd.get(user).equals(passw)) {
+                if (usrPwd.get(user).equals(passw.hashCode())) {
                     return true;
                 } else throw new InvalidPasswordException();
             } else throw new UserNotFoundException();
@@ -144,7 +144,7 @@ public class StringSecureDataContainer implements SecureDataContainer<String> {
     public boolean verifyOwnership(String user, String passw, String data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException {
         if (user != null && passw != null && data != null) {
             if (usrPwd.containsKey(user)) {
-                if (usrPwd.get(user).equals(passw)) {
+                if (usrPwd.get(user).equals(passw.hashCode())) {
                     if (!(data.equals(""))) {
                         for (String s : usrData.get(user)) {
                             if (s.equals(data)) return true;
