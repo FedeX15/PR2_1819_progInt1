@@ -87,18 +87,46 @@ public class StringSecureDataContainer implements SecureDataContainer<String> {
     }
 
     @Override
-    public void copy(String owner, String passw, String data) {
-        throw new UnsupportedOperationException("Non supportato.");
+    public void copy(String owner, String passw, String data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException {
+        if (owner != null && passw != null && data != null) {
+            if (usrPwd.containsKey(owner)) {
+                if (usrPwd.get(owner).equals(passw)) {
+                    if (!(data.equals(""))) {
+                        if (usrData.get(owner).contains(data)) {
+                                usrData.get(owner).add(data);
+                            } else throw new DataNotOwnedException();
+                    } else throw new InvalidDataException();
+                } else throw new InvalidPasswordException();
+            } else throw new UserNotFoundException();
+        } else throw new NullPointerException();
     }
 
     @Override
-    public void share(String owner, String passw, String other, String data) {
-        throw new UnsupportedOperationException("Non supportato.");
+    public void share(String owner, String passw, String other, String data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException {
+        if (owner != null && passw != null && other != null && data != null) {
+            if (usrPwd.containsKey(owner)) {
+                if (usrPwd.containsKey(other)) {
+                    if (usrPwd.get(owner).equals(passw)) {
+                        if (!(data.equals(""))) {
+                            if (usrData.get(owner).contains(data)) {
+                                usrData.get(other).add(data);
+                            } else throw new DataNotOwnedException();
+                        } else throw new InvalidDataException();
+                    } else throw new InvalidPasswordException();
+                } else throw new UserNotFoundException();
+            } else throw new UserNotFoundException();
+        } else throw new NullPointerException();
     }
 
     @Override
-    public Iterator<String> getIterator(String owner, String passw) {
-        throw new UnsupportedOperationException("Non supportato.");
+    public Iterator<String> getIterator(String owner, String passw) throws UserNotFoundException, InvalidPasswordException {
+        if (owner != null && passw != null) {
+            if (usrPwd.containsKey(owner)) {
+                if (usrPwd.get(owner).equals(passw)) {
+                    return usrData.get(owner).iterator();
+                } else throw new InvalidPasswordException();
+            } else throw new UserNotFoundException();
+        } else throw new NullPointerException();
     }
 
     @Override
