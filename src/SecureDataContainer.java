@@ -45,7 +45,7 @@ public interface SecureDataContainer<E> {
     
     //Ottiene una copia del valore del dato nella collezione se vengono
     //rispettati i controlli di identità
-    public E get(String owner, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException;
+    public E get(String owner, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException;
     //REQUIRES: owner e passw che siano utente e password corrispondente di un
     //utente esistente e data che sia un dato valido non NULL
     //THROWS: NullPointerException (unchecked, Java) se id o passw sono NULL,
@@ -137,6 +137,13 @@ public interface SecureDataContainer<E> {
     //RETURNS: il numero di dati dell'utente, -1 se l'utente non esiste
 
     //...altre operazioni da definire a scelta
+    
+     
+    class DataNotOwnedException extends Exception {
+        public DataNotOwnedException() {
+            super();
+        }
+    }
     
     class InvalidUserException extends Exception {
         public InvalidUserException() {
