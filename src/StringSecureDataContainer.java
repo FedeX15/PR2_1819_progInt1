@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class StringSecureDataContainer implements SecureDataContainer<String> {
     private HashMap<String, String> usrPwd;
-    private HashMap<String, List<String>> usrData;
+    private HashMap<String, ArrayList<String>> usrData;
         
     public StringSecureDataContainer() {
         this.usrPwd = new HashMap();
@@ -68,8 +68,22 @@ public class StringSecureDataContainer implements SecureDataContainer<String> {
     }
 
     @Override
-    public String remove(String owner, String passw, String data) {
-        throw new UnsupportedOperationException("Non supportato.");
+    public String remove(String owner, String passw, String data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException {
+        if (owner != null && passw != null && data != null) {
+            if (usrPwd.containsKey(owner)) {
+                if (usrPwd.get(owner).equals(passw)) {
+                    if (!(data.equals(""))) {
+                        for (int i = 0; i < usrData.size(); i++) {
+                            if (usrData.get(owner).get(i).equals(data)) {
+                                usrData.get(owner).remove(i);
+                                return data;
+                            }
+                        }
+                        return null;
+                    } else throw new InvalidDataException();
+                } else throw new InvalidPasswordException();
+            } else throw new UserNotFoundException();
+        } else throw new NullPointerException();
     }
 
     @Override
