@@ -15,9 +15,11 @@ public class StringSecureDataContainer implements SecureDataContainer<String> {
     }
 
     @Override
-    public void createUser(String id, String passw) {
+    public void createUser(String id, String passw) throws InvalidUserException{
         if (id != null && passw != null) {
-            usrPwd.put(id, passw);
+            if (!(usrPwd.containsKey(id))) {
+                usrPwd.put(id, passw);
+            } else throw new InvalidUserException();
         } else throw new NullPointerException();
     }
 
