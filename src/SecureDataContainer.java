@@ -12,9 +12,10 @@ public interface SecureDataContainer<E> {
     //0<=i<=getUsersN() e n=getDataN(usr-i, pwd-i) e i!=j => (usr-i)!=(usr-j)
     
     //Crea l'identità di un nuovo utente della collezione
-    public void createUser(String id, String passw);
+    public void createUser(String id, String passw) throws InvalidUserException;
     //REQUIRES: id e passw non NULL
-    //THROWS: NullPointerException (unchecked, Java) se id o passw sono NULL
+    //THROWS: NullPointerException (unchecked, Java) se id o passw sono NULL,
+    //InvalidUserException se id è già un utente registrato
     //EFFECTS: inserisce il nuovo utente nella lista degli utenti e la
     //corrispondente password assegnata
     //MODIFIES: la lista degli utenti
@@ -136,6 +137,12 @@ public interface SecureDataContainer<E> {
     //RETURNS: il numero di dati dell'utente, -1 se l'utente non esiste
 
     //...altre operazioni da definire a scelta
+    
+    class InvalidUserException extends Exception {
+        public InvalidUserException() {
+            super();
+        }
+    }
     
     class UserNotFoundException extends Exception {
         public UserNotFoundException() {
