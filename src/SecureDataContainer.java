@@ -21,7 +21,7 @@ public interface SecureDataContainer<E> {
     
     //Restituisce il numero degli elementi di un utente presenti nella
     //collezione
-    public int getSize(String owner, String passw);
+    public int getSize(String owner, String passw) throws UserNotFoundException, InvalidPasswordException;
     //REQUIRES: owner e passw che siano utente e password corrispondente di un
     //utente esistente
     //THROWS: NullPointerException (unchecked, Java) se id o passw sono NULL,
@@ -31,7 +31,7 @@ public interface SecureDataContainer<E> {
     
     //Inserisce il valore del dato nella collezione se vengono rispettati i
     //controlli di identità
-    public boolean put(String owner, String passw, E data);
+    public boolean put(String owner, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException;
     //REQUIRES: owner e passw che siano utente e password corrispondente di un
     //utente esistente e data che sia un dato valido non NULL
     //THROWS: NullPointerException (unchecked, Java) se id o passw sono NULL,
@@ -44,7 +44,7 @@ public interface SecureDataContainer<E> {
     
     //Ottiene una copia del valore del dato nella collezione se vengono
     //rispettati i controlli di identità
-    public E get(String owner, String passw, E data);
+    public E get(String owner, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException;
     //REQUIRES: owner e passw che siano utente e password corrispondente di un
     //utente esistente e data che sia un dato valido non NULL
     //THROWS: NullPointerException (unchecked, Java) se id o passw sono NULL,
@@ -55,7 +55,7 @@ public interface SecureDataContainer<E> {
     
     //Rimuove il dato dalla collezione se vengono rispettati i controlli di
     //identità
-    public E remove(String owner, String passw, E data);
+    public E remove(String owner, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException;
     //REQUIRES: owner e passw che siano utente e password corrispondente di un
     //utente esistente
     //THROWS: NullPointerException (unchecked, Java) se id o passw sono NULL,
@@ -68,7 +68,7 @@ public interface SecureDataContainer<E> {
     
     //Crea una copia del dato nella collezione se vengono rispettati i controlli
     //di identità
-    public void copy(String owner, String passw, E data);
+    public void copy(String owner, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException;
     //REQUIRES: owner e passw che siano utente e password corrispondente di un
     //utente esistente e data valido e non NULL
     //THROWS: NullPointerException (unchecked, Java) se id o passw sono NULL,
@@ -81,7 +81,7 @@ public interface SecureDataContainer<E> {
     
     //Condivide il dato nella collezione con un altro utente se vengono
     //rispettati i controlli di identità
-    public void share(String owner, String passw, String other, E data);
+    public void share(String owner, String passw, String other, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException;
     //REQUIRES: owner e passw che siano utente e password corrispondente di un
     //utente esistente e other che sia un altro utente esistente e data valido
     //e non NULL
@@ -96,7 +96,7 @@ public interface SecureDataContainer<E> {
     //Restituisce un iteratore (senza remove) che genera tutti i dati
     //dell'utente in ordine arbitrario se vengono rispettati i controlli di
     //identità
-    public Iterator<E> getIterator(String owner, String passw);
+    public Iterator<E> getIterator(String owner, String passw) throws UserNotFoundException, InvalidPasswordException;
     //REQUIRES: owner e passw che siano utente e password corrispondente di un
     //utente esistente
     //THROWS: NullPointerException (unchecked, Java) se id o passw sono NULL,
@@ -105,7 +105,7 @@ public interface SecureDataContainer<E> {
     //RETURNS: un oggetto Iterator<E> sulla collezione di owner
     
     //Verifica che l'utente indicato e la password indicata corrispondano
-    public boolean verifyUser(String user, String passw);
+    public boolean verifyUser(String user, String passw) throws UserNotFoundException, InvalidPasswordException;
     //REQUIRES: user e passw non NULL
     //THROWS: NullPointerException (unchecked, Java) se id o passw sono NULL,
     //UserNotFoundException (unchecked, non Java) se l'utente non esiste,
@@ -113,7 +113,7 @@ public interface SecureDataContainer<E> {
     //RETURNS: true se l'utente user esiste con password passw, false altrimenti
     
     //Verifica che l'utente indicato abbia i permessi per accedere ai dati
-    public boolean verifyOwnership(String user, String passw, E data);
+    public boolean verifyOwnership(String user, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException;
     //REQUIRES: owner e passw che siano utente e password corrispondente di un
     //utente esistente e data non NULL
     //THROWS: NullPointerException (unchecked, Java) se id o passw sono NULL,
@@ -128,7 +128,7 @@ public interface SecureDataContainer<E> {
     //RETURNS: il numero di utenti registrati
     
     //Ritorna il numero di dati dell'utente indicato
-    public int getDataN(String user, String passw);
+    public int getDataN(String user, String passw) throws UserNotFoundException, InvalidPasswordException;
     //REQUIRES: user e passw utente valido non NULL
     //THROWS: NullPointerException (unchecked, Java) se id o passw sono NULL,
     //UserNotFoundException (unchecked, non Java) se l'utente non esiste,
