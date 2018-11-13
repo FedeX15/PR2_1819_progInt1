@@ -6,10 +6,10 @@ import java.util.Iterator;
  */
 public class MatrixStringSecureDataContanier implements SecureDataContainer<String> {
     
-    int[][] usrData;
-    String[] usrs;
-    String[] pwds;
-    String[] data;
+    private int[][] usrData;
+    private String[] usrs;
+    private String[] pwds;
+    private String[] data;
 
     /*Matrice ij
     i: numero utenti
@@ -28,6 +28,16 @@ public class MatrixStringSecureDataContanier implements SecureDataContainer<Stri
         usrs = new String[0];
         pwds = new String[0];
         data = new String[0];
+    }
+    
+    public void printMatrix() {
+        for (int i = 0; i < usrData.length; i++) {
+            System.out.print(usrs[i] + ":");
+            for (int j = 0; j < usrData[i].length; j++) {
+                System.out.print(" " + usrData[i][j]);
+            }
+            System.out.println("");
+        }
     }
     
     public boolean checkExistingUser(String usr) {
@@ -106,7 +116,26 @@ public class MatrixStringSecureDataContanier implements SecureDataContainer<Stri
 
     @Override
     public boolean put(String owner, String passw, String data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException {
-        throw new UnsupportedOperationException("Non supportato.");
+        if (owner != null && passw != null && data != null) {
+            if (checkExistingUser(owner)) {
+                int n = -1;
+                for (int i = 0; i < usrs.length; i++) {
+                    if (usrs[i].equals(owner)) {
+                        n = i;
+                        break;
+                    }
+                }
+                if (pwds[n].equals(passw)){
+                    if (!(data.equals(""))) {
+                        usrData = addCol(usrData);
+                        this.data = increment(this.data);
+                        this.data[this.data.length-1] = data;
+                        usrData[n][this.data.length-1]++;
+                        return true;
+                    } else throw new InvalidDataException();
+                } else throw new InvalidPasswordException();
+            } else throw new UserNotFoundException();
+        } else throw new NullPointerException();
     }
 
     @Override

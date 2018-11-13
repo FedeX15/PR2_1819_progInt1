@@ -40,7 +40,8 @@ public class UnitTest2 {
     }
     
     public void printData() {
-        System.out.println("====================");
+        ((MatrixStringSecureDataContanier) dataContainer).printMatrix();
+        /*System.out.println("====================");
         try {
             System.out.print("fexed: ");
             for (Iterator i = dataContainer.getIterator("fexed", "abc123"); i.hasNext(); ) {
@@ -71,7 +72,7 @@ public class UnitTest2 {
             fail("UserNotFoundException");
         } catch (SecureDataContainer.InvalidPasswordException ex) {
             fail("InvalidPasswordException");
-        }
+        }*/
     }
 
     @Test
@@ -93,6 +94,7 @@ public class UnitTest2 {
             fail("No errore su utente che non va bene");
         } catch (SecureDataContainer.InvalidUserException ex) {
             assertEquals(dataContainer.getUsersN(), 5);}
+        printData();
     }
     
     public void addData() {
