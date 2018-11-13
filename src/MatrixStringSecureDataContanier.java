@@ -1,9 +1,15 @@
+import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
  * @author Federico Matteoni
  */
 public class MatrixStringSecureDataContanier implements SecureDataContainer<String> {
+    
+    int[][] usrData;
+    String[] usrs;
+    String[] pwds;
+    String[] data;
 
     /*Matrice ij
     i: numero utenti
@@ -17,9 +23,59 @@ public class MatrixStringSecureDataContanier implements SecureDataContainer<Stri
     Array dati: posizione j dato <dato-j>
     */
     
+    public MatrixStringSecureDataContanier() {
+        usrData = new int[0][0];
+        usrs = new String[0];
+        pwds = new String[0];
+        data = new String[0];
+    }
+    
+    public boolean checkExistingUser(String usr) {
+        for (String s : usrs) {
+            if (s.equals(usr)) return true;
+        }
+        return false;
+    }
+    
+    public String[] increment(String[] v) {
+        String[] newV = new String[v.length + 1];
+        for (int i = 0; i < v.length; i++) {
+            newV[i] = v[i];
+        }
+        return newV;
+    }
+    
+    public int[][] addRow(int[][] m) {
+        int[][] newM = new int[m.length+1][m[0].length];
+        for (int i = 0; i < m.length; i++) {
+            for (int j = 0; j < m[i].length; j++) {
+                newM[i][j] = m[i][j];
+            }
+        }
+        return newM;
+    }
+    
+    public int[][] addCol(int[][] m) {
+        int[][] newM = new int[m.length][m[0].length+1];
+        for (int i = 0; i < m.length; i++) {
+            for (int j = 0; j < m[i].length; j++) {
+                newM[i][j] = m[i][j];
+            }
+        }
+        return newM;
+    }
+        
     @Override
     public void createUser(String id, String passw) throws InvalidUserException {
-        throw new UnsupportedOperationException("Non supportato.");
+        if (id != null && passw != null) {
+            if (!(checkExistingUser(id))) {
+                usrs = increment(usrs);
+                pwds = increment(pwds);
+                usrs[usrs.length - 1] = id;
+                pwds[pwds.length - 1] = passw;
+                usrData = addRow(usrData);
+            } else throw new InvalidUserException();
+        } else throw new NullPointerException();
     }
 
     @Override
