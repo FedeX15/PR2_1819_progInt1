@@ -61,6 +61,7 @@ public class MatrixStringSecureDataContanier implements SecureDataContainer<Stri
             for (int j = 0; j < m[i].length; j++) {
                 newM[i][j] = m[i][j];
             }
+            newM[i][newM[i].length-1] = 0;
         }
         return newM;
     }
@@ -74,6 +75,9 @@ public class MatrixStringSecureDataContanier implements SecureDataContainer<Stri
                 usrs[usrs.length - 1] = id;
                 pwds[pwds.length - 1] = passw;
                 usrData = addRow(usrData);
+                for (int j = 0; j < usrData[usrData.length-1].length; j++) {
+                    usrData[usrData.length-1][j] = 0;
+                }
             } else throw new InvalidUserException();
         } else throw new NullPointerException();
     }
