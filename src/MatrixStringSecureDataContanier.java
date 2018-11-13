@@ -84,7 +84,24 @@ public class MatrixStringSecureDataContanier implements SecureDataContainer<Stri
 
     @Override
     public int getSize(String owner, String passw) throws UserNotFoundException, InvalidPasswordException {
-        throw new UnsupportedOperationException("Non supportato.");
+        if (owner != null && passw != null) {
+            if (checkExistingUser(owner)) {
+                int n = -1;
+                for (int i = 0; i < usrs.length; i++) {
+                    if (usrs[i].equals(owner)) {
+                        n = i;
+                        break;
+                    }
+                }
+                if (pwds[n].equals(passw)){
+                    int cnt = 0;
+                    for (int i = 0; i < usrData[n].length; i++) {
+                        cnt += usrData[n][i];
+                    }
+                    return cnt;
+                } else throw new InvalidPasswordException();
+            } else throw new UserNotFoundException();
+        } else throw new NullPointerException();
     }
 
     @Override
