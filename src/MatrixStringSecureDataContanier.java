@@ -1,11 +1,9 @@
-import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
  * @author Federico Matteoni
  */
 public class MatrixStringSecureDataContanier implements SecureDataContainer<String> {
-    
     private int[][] usrData;
     private String[] usrs;
     private String[] pwds;
