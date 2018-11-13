@@ -125,11 +125,23 @@ public class MatrixStringSecureDataContanier implements SecureDataContainer<Stri
                 }
                 if (pwds[n].equals(passw)){
                     if (!(data.equals(""))) {
-                        usrData = addCol(usrData);
-                        this.data = increment(this.data);
-                        this.data[this.data.length-1] = data;
-                        usrData[n][this.data.length-1]++;
-                        return true;
+                        int m = -1;
+                        for (int i = 0; i < this.data.length; i++) {
+                            if (this.data[i].equals(data)) {
+                                m = i;
+                                break;
+                            }
+                        }
+                        if (m != -1) {
+                            usrData = addCol(usrData);
+                            this.data = increment(this.data);
+                            this.data[this.data.length-1] = data;
+                            usrData[n][this.data.length-1]++;
+                            return true;
+                        } else {
+                            usrData[n][m]++;
+                            return true;
+                        }
                     } else throw new InvalidDataException();
                 } else throw new InvalidPasswordException();
             } else throw new UserNotFoundException();
@@ -138,12 +150,65 @@ public class MatrixStringSecureDataContanier implements SecureDataContainer<Stri
 
     @Override
     public String get(String owner, String passw, String data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException {
-        throw new UnsupportedOperationException("Non supportato.");
+        if (owner != null && passw != null && data != null) {
+            if (checkExistingUser(owner)) {
+                int n = -1;
+                for (int i = 0; i < usrs.length; i++) {
+                    if (usrs[i].equals(owner)) {
+                        n = i;
+                        break;
+                    }
+                }
+                if (pwds[n].equals(passw)) {
+                    if (!(data.equals(""))) {
+                        int m = -1;
+                        for (int i = 0; i < this.data.length; i++) {
+                            if (this.data[i].equals(data)) {
+                                m = i;
+                                break;
+                            }
+                        }
+                        if (m != -1) {
+                            if (usrData[n][m] > 0) {
+                                return data;
+                            } else throw new DataNotOwnedException();
+                        } else throw new InvalidDataException();
+                    } else throw new InvalidDataException();
+                } else throw new InvalidPasswordException();
+            } else throw new UserNotFoundException();
+        } else throw new NullPointerException();
     }
 
     @Override
     public String remove(String owner, String passw, String data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException {
-        throw new UnsupportedOperationException("Non supportato.");
+        if (owner != null && passw != null && data != null) {
+            if (checkExistingUser(owner)) {
+                int n = -1;
+                for (int i = 0; i < usrs.length; i++) {
+                    if (usrs[i].equals(owner)) {
+                        n = i;
+                        break;
+                    }
+                }
+                if (pwds[n].equals(passw)) {
+                    int m = -1;
+                    if (!(data.equals(""))) {
+                        for (int i = 0; i < this.data.length; i++) {
+                            if (this.data[i].equals(data)) {
+                                m = i;
+                                break;
+                            }
+                        }
+                        if (m != -1) {
+                            if (usrData[n][m] > 0) {
+                                usrData[n][m]--;
+                                return data;
+                            } else throw new DataNotOwnedException();
+                        } else throw new InvalidDataException();
+                    } else throw new InvalidDataException();
+                } else throw new InvalidPasswordException();
+            } else throw new UserNotFoundException();
+        } else throw new NullPointerException();
     }
 
     @Override
