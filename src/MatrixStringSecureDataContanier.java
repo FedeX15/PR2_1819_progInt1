@@ -5,6 +5,18 @@ import java.util.Iterator;
  */
 public class MatrixStringSecureDataContanier implements SecureDataContainer<String> {
 
+    /*Matrice ij
+    i: numero utenti
+    j: numero dati
+    Mij = n >= 0
+        0 -> il dato j non appartiene alla collezione dell'utente i
+        n -> il dato j appartiene alla collezione dell'utente i in n copie
+    
+    Array utenti: posizione i utente <nome-i>
+    Array password: posizione i password <pwd-i> dell'utente <nome-i>
+    Array dati: posizione j dato <dato-j>
+    */
+    
     @Override
     public void createUser(String id, String passw) throws InvalidUserException {
         throw new UnsupportedOperationException("Non supportato.");
