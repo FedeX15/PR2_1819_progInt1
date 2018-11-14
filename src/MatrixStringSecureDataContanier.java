@@ -299,14 +299,20 @@ public class MatrixStringSecureDataContanier implements SecureDataContainer<Stri
                         
                         @Override
                         public boolean hasNext() {
-                            if (c <= 0) {
-                                for ( ; i < data.length; i++) {
+                            if (i == 0 && c == 0) {
+                                if (i < data.length) {
+                                    c = datausr[i];       
+                                } else return false;
+                            }
+                            if (c > 0) return c <= datausr[i];
+                            else {
+                                for (; i < data.length; i++) {
                                     c = datausr[i];
-                                    if (c > 0) break;
+                                    if (c > 0) return true;
                                 }
-                                if (c <= 0) return false;
-                                else return c < datausr[i];
-                            } else return c < datausr[i];
+                                return false;
+                            }
+
                         }
 
                         @Override
