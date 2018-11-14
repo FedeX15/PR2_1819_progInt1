@@ -30,9 +30,9 @@ public class MatrixStringSecureDataContanier implements SecureDataContainer<Stri
     
     public void printMatrix() {
         for (int i = 0; i < usrData.length; i++) {
-            System.out.print(usrs[i] + ":");
+            System.out.print(usrs[i] + ":\t");
             for (int j = 0; j < usrData[i].length; j++) {
-                System.out.print(" " + usrData[i][j]);
+                System.out.print("\t" + usrData[i][j]);
             }
             System.out.println("");
         }
@@ -54,7 +54,7 @@ public class MatrixStringSecureDataContanier implements SecureDataContainer<Stri
     }
     
     public int[][] addRow(int[][] m) {
-        int[][] newM = new int[m.length+1][m[0].length];
+        int[][] newM = new int[m.length+1][data.length];
         for (int i = 0; i < m.length; i++) {
             for (int j = 0; j < m[i].length; j++) {
                 newM[i][j] = m[i][j];
@@ -64,7 +64,7 @@ public class MatrixStringSecureDataContanier implements SecureDataContainer<Stri
     }
     
     public int[][] addCol(int[][] m) {
-        int[][] newM = new int[m.length][m[0].length+1];
+        int[][] newM = new int[m.length][data.length+1];
         for (int i = 0; i < m.length; i++) {
             for (int j = 0; j < m[i].length; j++) {
                 newM[i][j] = m[i][j];
@@ -132,7 +132,7 @@ public class MatrixStringSecureDataContanier implements SecureDataContainer<Stri
                                 break;
                             }
                         }
-                        if (m != -1) {
+                        if (m == -1) {
                             usrData = addCol(usrData);
                             this.data = increment(this.data);
                             this.data[this.data.length-1] = data;
@@ -213,17 +213,111 @@ public class MatrixStringSecureDataContanier implements SecureDataContainer<Stri
 
     @Override
     public void copy(String owner, String passw, String data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException {
-        throw new UnsupportedOperationException("Non supportato.");
+        if (owner != null && passw != null && data != null) {
+            if (checkExistingUser(owner)) {
+                int n = -1;
+                for (int i = 0; i < usrs.length; i++) {
+                    if (usrs[i].equals(owner)) {
+                        n = i;
+                        break;
+                    }
+                }
+                if (pwds[n].equals(passw)){
+                    if (!(data.equals(""))) {
+                        int m = -1;
+                        for (int i = 0; i < this.data.length; i++) {
+                            if (this.data[i].equals(data)) {
+                                m = i;
+                                break;
+                            }
+                        }
+                        if (m != -1) {
+                            usrData[n][m]++;
+                        } else throw new InvalidDataException();
+                    } else throw new InvalidDataException();
+                } else throw new InvalidPasswordException();
+            } else throw new UserNotFoundException();
+        } else throw new NullPointerException();
     }
 
     @Override
     public void share(String owner, String passw, String other, String data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException {
-        throw new UnsupportedOperationException("Non supportato.");
+        if (owner != null && passw != null && data != null) {
+            if (checkExistingUser(owner)) {
+                int n = -1;
+                for (int i = 0; i < usrs.length; i++) {
+                    if (usrs[i].equals(owner)) {
+                        n = i;
+                        break;
+                    }
+                }
+                if (pwds[n].equals(passw)){
+                    if (checkExistingUser(other)) {
+                        int o = -1;
+                        for (int i = 0; i < usrs.length; i++) {
+                            if (usrs[i].equals(other)) {
+                                o = i;
+                                break;
+                            }
+                        }
+                        if (!(data.equals(""))) {
+                            int m = -1;
+                            for (int i = 0; i < this.data.length; i++) {
+                                if (this.data[i].equals(data)) {
+                                    m = i;
+                                    break;
+                                }
+                            }
+                            if (m != -1) {
+                                if (usrData[n][m] > 0) {
+                                    usrData[o][m]++;
+                                } else throw new DataNotOwnedException();
+                            } else throw new InvalidDataException();
+                        } else throw new InvalidDataException();
+                    } else throw new UserNotFoundException();
+                } else throw new InvalidPasswordException();
+            } else throw new UserNotFoundException();
+        } else throw new NullPointerException();
     }
 
     @Override
     public Iterator<String> getIterator(String owner, String passw) throws UserNotFoundException, InvalidPasswordException {
-        throw new UnsupportedOperationException("Non supportato.");
+        if (owner != null && passw != null && data != null) {
+            if (checkExistingUser(owner)) {
+                int n = -1;
+                for (int i = 0; i < usrs.length; i++) {
+                    if (usrs[i].equals(owner)) {
+                        n = i;
+                        break;
+                    }
+                }
+                if (pwds[n].equals(passw)){
+                    final int[] datausr = usrData[n];
+                    final String[] data = this.data;
+                    return new Iterator<String>() {
+                        int i = 0;
+                        int c = -1;
+                        
+                        @Override
+                        public boolean hasNext() {
+                            return i < data.length;
+                        }
+
+                        @Override
+                        public String next() {
+                            if (c < 0) {
+                                i++;
+                                c = datausr[i];
+                                c--;
+                            }
+                            c--;
+                            return data[i];
+                            
+                        }
+                    };
+                } else throw new InvalidPasswordException();
+            } else throw new UserNotFoundException();
+        } else throw new NullPointerException();
     }
 
     @Override
@@ -238,12 +332,26 @@ public class MatrixStringSecureDataContanier implements SecureDataContainer<Stri
 
     @Override
     public int getUsersN() {
-        throw new UnsupportedOperationException("Non supportato.");
+        return usrs.length;
     }
 
     @Override
     public int getDataN(String user, String passw) throws UserNotFoundException, InvalidPasswordException {
-        throw new UnsupportedOperationException("Non supportato.");
+       if (checkExistingUser(user)) {
+            int n = -1;
+            for (int i = 0; i < usrs.length; i++) {
+                if (usrs[i].equals(user)) {
+                    n = i;
+                    break;
+                }
+            }
+            if (pwds[n].equals(passw)){
+                int sum = 0;
+                for (int i = 0; i < data.length; i++) {
+                    sum += usrData[n][i];
+                }
+                return sum;
+            } else throw new InvalidPasswordException();
+        } else throw new UserNotFoundException();
     }
-    
 }
