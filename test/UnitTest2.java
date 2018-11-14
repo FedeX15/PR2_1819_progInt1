@@ -93,7 +93,8 @@ public class UnitTest2 {
             dataContainer.createUser("fexed", "asdasd");
             fail("No errore su utente che non va bene");
         } catch (SecureDataContainer.InvalidUserException ex) {
-            assertEquals(dataContainer.getUsersN(), 5);}
+            assertEquals(dataContainer.getUsersN(), 5);
+        }
         printData();
     }
     
@@ -134,7 +135,7 @@ public class UnitTest2 {
         } catch (SecureDataContainer.InvalidPasswordException ex) {
             fail("InvalidPasswordException sul secondo try");
         } catch (SecureDataContainer.InvalidDataException ex) {
-            fail("InvalidPasswordException sul secondo try");
+            fail("InvalidDataException sul secondo try");
         }
         
         
@@ -179,7 +180,7 @@ public class UnitTest2 {
         } catch (SecureDataContainer.InvalidDataException ex) {
             fail("InvalidDataException");
         } catch(SecureDataContainer.DataNotOwnedException ex) {
-            fail("InvalidDataException");  
+            fail("DataNotOwnedException");  
         }
         printData();
     }

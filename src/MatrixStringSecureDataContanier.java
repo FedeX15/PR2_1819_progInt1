@@ -294,25 +294,23 @@ public class MatrixStringSecureDataContanier implements SecureDataContainer<Stri
                     final int[] datausr = usrData[n];
                     final String[] data = this.data;
                     return new Iterator<String>() {
-                        int i = 0;
+                        int i = -1;
                         int c = 0;
                         
                         @Override
                         public boolean hasNext() {
-                            if (i == 0 && c == 0) {
-                                if (i < data.length) {
-                                    c = datausr[i];       
-                                } else return false;
-                            }
                             if (c > 0) return c <= datausr[i];
                             else {
-                                for (; i < data.length; i++) {
-                                    c = datausr[i];
-                                    if (c > 0) return true;
-                                }
+                                i++;
+                                do {
+                                    if (i < data.length) {
+                                        c = datausr[i];
+                                        if (c > 0) return true;
+                                        else i++;
+                                    }
+                                } while (i < data.length);
                                 return false;
                             }
-
                         }
 
                         @Override
