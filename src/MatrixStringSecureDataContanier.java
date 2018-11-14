@@ -30,11 +30,10 @@ public class MatrixStringSecureDataContanier implements SecureDataContainer<Stri
     
     public void printMatrix() {
         for (int i = 0; i < usrData.length; i++) {
-            System.out.print(usrs[i] + ":\t");
-            for (int j = 0; j < usrData[i].length; j++) {
-                System.out.print("\t" + usrData[i][j]);
+            for (int j = 0; j < data.length; j++) {
+                System.out.print(" " + usrData[i][j]);
             }
-            System.out.println("");
+            System.out.println("\t" + usrs[i]);
         }
     }
     
@@ -296,20 +295,22 @@ public class MatrixStringSecureDataContanier implements SecureDataContainer<Stri
                     final String[] data = this.data;
                     return new Iterator<String>() {
                         int i = 0;
-                        int c = -1;
+                        int c = 0;
                         
                         @Override
                         public boolean hasNext() {
-                            return i < data.length;
+                            if (c <= 0) {
+                                for ( ; i < data.length; i++) {
+                                    c = datausr[i];
+                                    if (c > 0) break;
+                                }
+                                if (c <= 0) return false;
+                                else return c < datausr[i];
+                            } else return c < datausr[i];
                         }
 
                         @Override
                         public String next() {
-                            if (c < 0) {
-                                i++;
-                                c = datausr[i];
-                                c--;
-                            }
                             c--;
                             return data[i];
                             

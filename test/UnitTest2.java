@@ -40,8 +40,8 @@ public class UnitTest2 {
     }
     
     public void printData() {
-        ((MatrixStringSecureDataContanier) dataContainer).printMatrix();
         System.out.println("====================");
+        ((MatrixStringSecureDataContanier) dataContainer).printMatrix();
         try {
             System.out.print("fexed: ");
             for (Iterator i = dataContainer.getIterator("fexed", "abc123"); i.hasNext(); ) {
