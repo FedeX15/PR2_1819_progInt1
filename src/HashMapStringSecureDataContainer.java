@@ -87,6 +87,7 @@ public class HashMapStringSecureDataContainer implements SecureDataContainer<Str
 
     @Override
     public void copy(String owner, String passw, String data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException {
+        //TODO CREARE una copia di data prima di copiarlo
         if (owner != null && passw != null && data != null) {
             if (usrPwd.containsKey(owner)) {
                 if (usrPwd.get(owner).equals(passw.hashCode())) {
