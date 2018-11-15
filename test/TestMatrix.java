@@ -11,11 +11,11 @@ import static org.junit.Assert.*;
 /**
  * @author Federico Matteoni
  */
-public class UnitTest1 {
+public class TestMatrix {
     SecureDataContainer<String> dataContainer;
     
-    public UnitTest1() {
-        this.dataContainer = new HashMapStringSecureDataContainer();
+    public TestMatrix() {
+        this.dataContainer = new StringMatrix();
     }
     
     @BeforeClass
@@ -41,6 +41,7 @@ public class UnitTest1 {
     
     public void printData() {
         System.out.println("====================");
+        ((StringMatrix) dataContainer).printMatrix();
         try {
             System.out.print("fexed: ");
             for (Iterator i = dataContainer.getIterator("fexed", "abc123"); i.hasNext(); ) {
@@ -92,7 +93,9 @@ public class UnitTest1 {
             dataContainer.createUser("fexed", "asdasd");
             fail("No errore su utente che non va bene");
         } catch (SecureDataContainer.InvalidUserException ex) {
-            assertEquals(dataContainer.getUsersN(), 5);}
+            assertEquals(dataContainer.getUsersN(), 5);
+        }
+        printData();
     }
     
     public void addData() {
@@ -132,7 +135,7 @@ public class UnitTest1 {
         } catch (SecureDataContainer.InvalidPasswordException ex) {
             fail("InvalidPasswordException sul secondo try");
         } catch (SecureDataContainer.InvalidDataException ex) {
-            fail("InvalidPasswordException sul secondo try");
+            fail("InvalidDataException sul secondo try");
         }
         
         
@@ -177,7 +180,7 @@ public class UnitTest1 {
         } catch (SecureDataContainer.InvalidDataException ex) {
             fail("InvalidDataException");
         } catch(SecureDataContainer.DataNotOwnedException ex) {
-            fail("InvalidDataException");  
+            fail("DataNotOwnedException");  
         }
         printData();
     }
