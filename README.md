@@ -15,7 +15,7 @@ ad accedere ai dati, mentre altri non possono accedervi senza autorizzazione.
 
 1. [X] Si	definisca la	**specifica	completa	come interfaccia Java** del	 tipo	di	dato	SecureDataContainer<E>	,	
 fornendo le	motivazioni delle	scelte	effettuate.
-2. [ ] Si	 definisca **l’implementazione	 del	 tipo	 di	 SecureDataContainer<E>	 fornendo almeno	 due	
+2. [X] Si	 definisca **l’implementazione	 del	 tipo	 di	 SecureDataContainer<E>	 fornendo almeno	 due	
 implementazioni	 che	 utilizzano	 differenti	 strutture	 di	 supporto**.	 In	 entrambi	 i	 casi	 si devono
 comunque	descrivere	sia	la	funzione	di	astrazione	sia	l’invariante	di	rappresentazione.	 Si	discutano
 le	caratteristiche	delle	due	implementazioni.
