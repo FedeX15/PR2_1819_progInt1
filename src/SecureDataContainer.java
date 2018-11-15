@@ -52,6 +52,8 @@ public interface SecureDataContainer<E> {
     //UserNotFoundException (unchecked, non Java) se l'utente non esiste,
     //InvalidPasswordException (unchecked, non Java) se la password è sbagliata,
     //InvalidDataException (unchecked, non Java) se il dato è invalido o è NULL
+    //DataNotOwnedException (unchecked, non Java) se il dato non appartiene alla
+    //collezione di owner
     //RETURNS: NULL se il dato non è presente o una copia di data altrimenti
     
     //Rimuove il dato dalla collezione se vengono rispettati i controlli di

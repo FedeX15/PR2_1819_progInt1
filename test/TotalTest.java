@@ -35,6 +35,7 @@ public class TotalTest {
         addUsers(container);
         addData(container);
         shareData(container);
+        errors(container);
     }
     
     @Test
@@ -43,6 +44,7 @@ public class TotalTest {
         addUsers(container);
         addData(container);
         shareData(container);
+        errors(container);
     }
 
     public void addUsers(SecureDataContainer<String> container) {
@@ -57,12 +59,6 @@ public class TotalTest {
         } catch (SecureDataContainer.InvalidUserException ex) {
             fail("Errore su utenti che vanno bene");
         }
-        
-        try {
-            container.createUser("fexed", "asdasd");
-            fail("No errore su utente che non va bene");
-        } catch (SecureDataContainer.InvalidUserException ex) {
-            assertEquals(container.getUsersN(), 5);}
     }
     
     public void addData(SecureDataContainer<String> container) {
@@ -94,35 +90,6 @@ public class TotalTest {
             fail("InvalidDataException sul primo try");
         }
         
-        try {
-            container.put("asd", "asd", "pippo");
-            fail("Utente asd non ha dato UserNotFoundException sul secondo try");
-        } catch (SecureDataContainer.UserNotFoundException ex) {
-        } catch (SecureDataContainer.InvalidPasswordException ex) {
-            fail("InvalidPasswordException sul secondo try");
-        } catch (SecureDataContainer.InvalidDataException ex) {
-            fail("InvalidPasswordException sul secondo try");
-        }
-        
-        
-        try {
-            container.put("fexed", "asd", "pippo");
-            fail("Utente fexed non ha dato InvalidPasswordException sul terzo try");
-        } catch (SecureDataContainer.UserNotFoundException ex) {
-            fail("UserNotFoundException sul terzo try");
-        } catch (SecureDataContainer.InvalidPasswordException ex) {
-        } catch (SecureDataContainer.InvalidDataException ex) {
-            fail("InvalidPasswordException sul terzo try");
-        }
-        
-        try {
-            container.put("fexed", "abc123", "");
-            fail("Utente fexed non ha dato InvalidDataException sul quarto try");
-        } catch (SecureDataContainer.UserNotFoundException ex) {
-            fail("UserNotFoundException sul quarto try");
-        } catch (SecureDataContainer.InvalidPasswordException ex) {
-            fail("InvalidPasswordException sul quarto try");
-        } catch (SecureDataContainer.InvalidDataException ex) {}
     }
     
     public void shareData(SecureDataContainer<String> container) {
@@ -175,6 +142,52 @@ public class TotalTest {
     }
     
     public void errors(SecureDataContainer<String> container) {
+        try {
+            container.createUser("fexed", "asdasd");
+            container.createUser("dexef", "asdasd");
+            fail("No errore su utenti che non vanno bene");
+        } catch (SecureDataContainer.InvalidUserException ex) {
+            assertEquals(container.getUsersN(), 5);
+        }
         
+        try {
+            container.put("asd", "asd", "pippo");
+            fail("Utente asd non ha dato UserNotFoundException");
+        } catch (SecureDataContainer.UserNotFoundException ex) {
+        } catch (SecureDataContainer.InvalidPasswordException ex) {
+            fail("InvalidPasswordException sul secondo try");
+        } catch (SecureDataContainer.InvalidDataException ex) {
+            fail("InvalidPasswordException sul secondo try");
+        }
+        
+        try {
+            container.put("fexed", "asd", "pippo");
+            fail("Utente fexed non ha dato InvalidPasswordException");
+        } catch (SecureDataContainer.UserNotFoundException ex) {
+            fail("UserNotFoundException");
+        } catch (SecureDataContainer.InvalidPasswordException ex) {
+        } catch (SecureDataContainer.InvalidDataException ex) {
+            fail("InvalidPasswordException");
+        }
+        
+        try {
+            container.put("fexed", "abc123", "");
+            fail("Utente fexed non ha dato InvalidDataException");
+        } catch (SecureDataContainer.UserNotFoundException ex) {
+            fail("UserNotFoundException");
+        } catch (SecureDataContainer.InvalidPasswordException ex) {
+            fail("InvalidPasswordException");
+        } catch (SecureDataContainer.InvalidDataException ex) {}
+        
+        
+        try {
+            container.get("fexed", "abc123", "Frank Sinatra");
+            fail("Utente fexed non ha dato DataNotOwnedException o InvalidDataException");
+        } catch (SecureDataContainer.UserNotFoundException ex) {
+            fail("UserNotFoundException");
+        } catch (SecureDataContainer.InvalidPasswordException ex) {
+            fail("InvalidPasswordException");
+        } catch (SecureDataContainer.InvalidDataException ex) {
+        } catch (SecureDataContainer.DataNotOwnedException ex) {}
     }
 }
