@@ -124,6 +124,12 @@ public interface SecureDataContainer<E> {
     //RETURNS: true se l'oggetto data appartiene all'utente user, false
     //altrimenti
     
+    //Verifica che data sia un dato valido
+    public boolean verifyData(E data);
+    //REQUIRES: data non NULL
+    //THROWS: NullPointerException se data è null
+    //RETURNS: true se data è valido, falso se data non è valido
+    
     //Ritorna il numero di utenti registrati
     public int getUsersN();
     //RETURNS: il numero di utenti registrati
