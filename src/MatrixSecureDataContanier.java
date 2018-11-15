@@ -122,6 +122,7 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
 
     @Override
     public boolean put(String owner, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException {
+        
         if (owner != null && passw != null && data != null) {
             if (checkExistingUser(owner)) {
                 int n = -1;
@@ -336,14 +337,49 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
 
     @Override
     public boolean verifyUser(String user, String passw) throws UserNotFoundException, InvalidPasswordException {
-        //TODO
-        throw new UnsupportedOperationException("Non supportato.");
+        if (user != null && passw != null && data != null) {
+            if (checkExistingUser(user)) {
+                int n = -1;
+                for (int i = 0; i < usrs.length; i++) {
+                    if (usrs[i].equals(user)) {
+                        n = i;
+                        break;
+                    }
+                }
+                if (pwds[n].equals(passw)){
+                    return true;
+                } else throw new InvalidPasswordException();
+            } else throw new UserNotFoundException();
+        } else throw new NullPointerException();
     }
 
     @Override
     public boolean verifyOwnership(String user, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException {
-        //TODO
-        throw new UnsupportedOperationException("Non supportato.");
+        if (user != null && passw != null && data != null) {
+            if (checkExistingUser(user)) {
+                int n = -1;
+                for (int i = 0; i < usrs.length; i++) {
+                    if (usrs[i].equals(user)) {
+                        n = i;
+                        break;
+                    }
+                }
+                if (pwds[n].equals(passw)){
+                    if (verifyData(data)) {
+                        int m = -1;
+                        for (int i = 0; i < this.data.length; i++) {
+                            if (this.data[i].equals(data)) {
+                                m = i;
+                                break;
+                            }
+                        }
+                        if (m != -1) {
+                            return usrData[n][m] > 0;
+                        } else throw new InvalidDataException();
+                    } else throw new InvalidDataException();
+                } else throw new InvalidPasswordException();
+            } else throw new UserNotFoundException();
+        } else throw new NullPointerException();
     }
 
     @Override
