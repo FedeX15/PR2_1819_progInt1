@@ -1,13 +1,20 @@
 import java.util.Iterator;
 
 /**
+ * Implementaizione di SecureDataContainer con una matrice
+ * Matrice ij
+ *  i: numero utenti
+ *  j: numero dati
+ *  Mij = n >= 0
+ *      0 -> il dato j non appartiene alla collezione dell'utente i
+ *      n -> il dato j appartiene alla collezione dell'utente i in n copie
  * @author Federico Matteoni
  */
-public abstract class MatrixStringSecureDataContanier<E> implements SecureDataContainer<E> {
+public abstract class MatrixSecureDataContanier<E> implements SecureDataContainer<E> {
     private int[][] usrData;
     private String[] usrs;
     private String[] pwds;
-    private E[] data;
+    protected E[] data;
 
     /*Matrice ij
     i: numero utenti
@@ -21,7 +28,7 @@ public abstract class MatrixStringSecureDataContanier<E> implements SecureDataCo
     Array dati: posizione j dato <dato-j>
     */
     
-    public MatrixStringSecureDataContanier() {
+    public MatrixSecureDataContanier() {
         usrData = new int[0][0];
         usrs = new String[0];
         pwds = new String[0];

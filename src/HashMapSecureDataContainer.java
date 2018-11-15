@@ -3,7 +3,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 /**
- * Implementazione di SecureDataContainer.java con String
+ * Implementazione di SecureDataContainer.java con HashMap
  * @author Federico Matteoni
  */
 public abstract class HashMapSecureDataContainer<E> implements SecureDataContainer<E> {
