@@ -1,4 +1,5 @@
 
+import java.util.Iterator;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,7 +38,7 @@ public class MainClass {
                     + "\tR\tRimuovi un dato dalla collezione di un utente\n"
                     + "\tC\tCopia un dato nella collezione dell'utente\n"
                     + "\tS\tCondividi un dato nella collezione di un altro utente\n"
-                    + "\tZ\tStampa lo stato dell'intero container\n"
+                    + "\tZ\tStampa lo stato della collezione di un utente\n"
                     + "\tX\tChiudi\n\t");
             c = in.next();
             
@@ -118,6 +119,21 @@ public class MainClass {
                     
                 case "Z":
                 case "z":
+                    System.out.print("Nome utente: ");
+                    usr = in.next();
+                    System.out.print("Password: ");
+                    pwd = in.next();
+                    try {
+                        System.out.print(usr+ ": ");
+                        for (Iterator i = container.getIterator(usr, pwd); i.hasNext(); ) {
+                            System.out.print(i.next()+"|");
+                        }
+                        System.out.println("");
+                    } catch (SecureDataContainer.UserNotFoundException ex) {
+                        System.out.println("***ERRORE: utente non esistente");
+                    } catch (SecureDataContainer.InvalidPasswordException ex) {
+                        System.out.println("***ERRORE: password errata");
+                    }
                     
                     break;
             }
