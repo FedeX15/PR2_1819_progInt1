@@ -3,11 +3,11 @@ import java.util.Iterator;
 /**
  * @author Federico Matteoni
  */
-public class MatrixStringSecureDataContanier implements SecureDataContainer<String> {
+public abstract class MatrixStringSecureDataContanier<E> implements SecureDataContainer<E> {
     private int[][] usrData;
     private String[] usrs;
     private String[] pwds;
-    private String[] data;
+    private E[] data;
 
     /*Matrice ij
     i: numero utenti
@@ -25,7 +25,7 @@ public class MatrixStringSecureDataContanier implements SecureDataContainer<Stri
         usrData = new int[0][0];
         usrs = new String[0];
         pwds = new String[0];
-        data = new String[0];
+        //data = new E[0];
     }
     
     public void printMatrix() {
@@ -43,6 +43,8 @@ public class MatrixStringSecureDataContanier implements SecureDataContainer<Stri
         }
         return false;
     }
+    
+    public abstract E[] increment(E[] v);
     
     public String[] increment(String[] v) {
         String[] newV = new String[v.length + 1];
@@ -112,7 +114,7 @@ public class MatrixStringSecureDataContanier implements SecureDataContainer<Stri
     }
 
     @Override
-    public boolean put(String owner, String passw, String data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException {
+    public boolean put(String owner, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException {
         if (owner != null && passw != null && data != null) {
             if (checkExistingUser(owner)) {
                 int n = -1;
@@ -123,7 +125,7 @@ public class MatrixStringSecureDataContanier implements SecureDataContainer<Stri
                     }
                 }
                 if (pwds[n].equals(passw)){
-                    if (!(data.equals(""))) {
+                    if (verifyData(data)) {
                         int m = -1;
                         for (int i = 0; i < this.data.length; i++) {
                             if (this.data[i].equals(data)) {
@@ -148,7 +150,7 @@ public class MatrixStringSecureDataContanier implements SecureDataContainer<Stri
     }
 
     @Override
-    public String get(String owner, String passw, String data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException {
+    public E get(String owner, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException {
         if (owner != null && passw != null && data != null) {
             if (checkExistingUser(owner)) {
                 int n = -1;
@@ -159,7 +161,7 @@ public class MatrixStringSecureDataContanier implements SecureDataContainer<Stri
                     }
                 }
                 if (pwds[n].equals(passw)) {
-                    if (!(data.equals(""))) {
+                    if (verifyData(data)) {
                         int m = -1;
                         for (int i = 0; i < this.data.length; i++) {
                             if (this.data[i].equals(data)) {
@@ -179,7 +181,7 @@ public class MatrixStringSecureDataContanier implements SecureDataContainer<Stri
     }
 
     @Override
-    public String remove(String owner, String passw, String data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException {
+    public E remove(String owner, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException {
         if (owner != null && passw != null && data != null) {
             if (checkExistingUser(owner)) {
                 int n = -1;
@@ -191,7 +193,7 @@ public class MatrixStringSecureDataContanier implements SecureDataContainer<Stri
                 }
                 if (pwds[n].equals(passw)) {
                     int m = -1;
-                    if (!(data.equals(""))) {
+                    if (verifyData(data)) {
                         for (int i = 0; i < this.data.length; i++) {
                             if (this.data[i].equals(data)) {
                                 m = i;
@@ -211,7 +213,7 @@ public class MatrixStringSecureDataContanier implements SecureDataContainer<Stri
     }
 
     @Override
-    public void copy(String owner, String passw, String data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException {
+    public void copy(String owner, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException {
         if (owner != null && passw != null && data != null) {
             if (checkExistingUser(owner)) {
                 int n = -1;
@@ -222,7 +224,7 @@ public class MatrixStringSecureDataContanier implements SecureDataContainer<Stri
                     }
                 }
                 if (pwds[n].equals(passw)){
-                    if (!(data.equals(""))) {
+                    if (verifyData(data)) {
                         int m = -1;
                         for (int i = 0; i < this.data.length; i++) {
                             if (this.data[i].equals(data)) {
@@ -240,7 +242,7 @@ public class MatrixStringSecureDataContanier implements SecureDataContainer<Stri
     }
 
     @Override
-    public void share(String owner, String passw, String other, String data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException {
+    public void share(String owner, String passw, String other, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException {
         if (owner != null && passw != null && data != null) {
             if (checkExistingUser(owner)) {
                 int n = -1;
@@ -259,7 +261,7 @@ public class MatrixStringSecureDataContanier implements SecureDataContainer<Stri
                                 break;
                             }
                         }
-                        if (!(data.equals(""))) {
+                        if (verifyData(data)) {
                             int m = -1;
                             for (int i = 0; i < this.data.length; i++) {
                                 if (this.data[i].equals(data)) {
@@ -280,7 +282,7 @@ public class MatrixStringSecureDataContanier implements SecureDataContainer<Stri
     }
 
     @Override
-    public Iterator<String> getIterator(String owner, String passw) throws UserNotFoundException, InvalidPasswordException {
+    public Iterator<E> getIterator(String owner, String passw) throws UserNotFoundException, InvalidPasswordException {
         if (owner != null && passw != null && data != null) {
             if (checkExistingUser(owner)) {
                 int n = -1;
@@ -292,8 +294,8 @@ public class MatrixStringSecureDataContanier implements SecureDataContainer<Stri
                 }
                 if (pwds[n].equals(passw)){
                     final int[] datausr = usrData[n];
-                    final String[] data = this.data;
-                    return new Iterator<String>() {
+                    final E[] data = this.data;
+                    return new Iterator<E>() {
                         int i = -1;
                         int c = 0;
                         
@@ -314,7 +316,7 @@ public class MatrixStringSecureDataContanier implements SecureDataContainer<Stri
                         }
 
                         @Override
-                        public String next() {
+                        public E next() {
                             c--;
                             return data[i];
                             
@@ -327,11 +329,13 @@ public class MatrixStringSecureDataContanier implements SecureDataContainer<Stri
 
     @Override
     public boolean verifyUser(String user, String passw) throws UserNotFoundException, InvalidPasswordException {
+        //TODO
         throw new UnsupportedOperationException("Non supportato.");
     }
 
     @Override
-    public boolean verifyOwnership(String user, String passw, String data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException {
+    public boolean verifyOwnership(String user, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException {
+        //TODO
         throw new UnsupportedOperationException("Non supportato.");
     }
 
