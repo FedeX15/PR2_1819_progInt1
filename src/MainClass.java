@@ -1,5 +1,7 @@
 
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Federico Matteoni
@@ -38,6 +40,87 @@ public class MainClass {
                     + "\tZ\tStampa lo stato dell'intero container\n"
                     + "\tX\tChiudi\n\t");
             c = in.next();
+            
+            switch (c) {
+                case "A":
+                case "a":
+                    String usr, pwd;
+                    System.out.print("Nome utente: ");
+                    usr = in.next();
+                    System.out.print("Password: ");
+                    pwd = in.next();
+                    try {
+                        container.createUser(usr, pwd);
+                    } catch (SecureDataContainer.InvalidUserException ex) {
+                        System.out.println("***ERRORE: nome utente già registrato");
+                    }
+                    
+                    break;
+                
+                case "D":
+                case "d":
+                    System.out.print("Nome utente: ");
+                    usr = in.next();
+                    System.out.print("Password: ");
+                    pwd = in.next();
+                    try {
+                        System.out.println("Dimensione della collezione dell'utente " + usr + ": " + container.getSize(usr, pwd));
+                    } catch (SecureDataContainer.UserNotFoundException ex) {
+                        System.out.println("***ERRORE: utente non esistente");
+                    } catch (SecureDataContainer.InvalidPasswordException ex) {
+                        System.out.println("***ERRORE: password errata");
+                    }
+                    break;
+                    
+                case "I":
+                case "i":
+                    String data;
+                    System.out.print("Nome utente: ");
+                    usr = in.next();
+                    System.out.print("Password: ");
+                    pwd = in.next();
+                    System.out.print("Stringa da inserire: ");
+                    data = in.next();
+                    try {
+                        if (container.put(usr, pwd, data)) {
+                            System.out.println(data + " inserito correttamente nella collezione dell'utente " + usr);
+                        } else {
+                            System.out.println(data + " NON è stato inserito nella collezione dell'utente " + usr);
+                        }
+                    } catch (SecureDataContainer.UserNotFoundException ex) {
+                        System.out.println("***ERRORE: utente non esistente");
+                    } catch (SecureDataContainer.InvalidPasswordException ex) {
+                        System.out.println("***ERRORE: password errata");
+                    } catch (SecureDataContainer.InvalidDataException ex) {
+                        System.out.println("***ERRORE: dato non valido");
+                    }
+                    break;
+                
+                case "O":
+                case "o":
+                    
+                    break;
+                
+                case "R":
+                case "r":
+                    
+                    break;
+                    
+                case "C":
+                case "c":
+                    
+                    break;
+                    
+                case "S":
+                case "s":
+                    
+                    break;
+                    
+                case "Z":
+                case "z":
+                    
+                    break;
+            }
 
         } while (!"X".equals(c) && !"x".equals(c));
         
