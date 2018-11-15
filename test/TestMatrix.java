@@ -159,7 +159,7 @@ public class TestMatrix {
         } catch (SecureDataContainer.InvalidDataException ex) {}
         printData();
     }
-    
+
     @Test
     public void shareData() {
         addData();
@@ -170,9 +170,36 @@ public class TestMatrix {
             assertEquals(dataContainer.getDataN("dexef", "321cba"), 4);
             dataContainer.share("fexed", "abc123", "dexef", "lasagna");
             dataContainer.share("fexed", "abc123", "dexef", "lasagna");
+            dataContainer.share("fexed", "abc123", "dexef", "lasagna");
+            dataContainer.share("fexed", "abc123", "dexef", "lasagna");
+            dataContainer.share("fexed", "abc123", "dexef", "lasagna");
+            dataContainer.share("fexed", "abc123", "dexef", "lasagna");
+            dataContainer.share("fexed", "abc123", "dexef", "lasagna");
+            dataContainer.share("fexed", "abc123", "dexef", "lasagna");
+            dataContainer.share("fexed", "abc123", "dexef", "lasagna");
+            dataContainer.share("fexed", "abc123", "dexef", "lasagna");
+            dataContainer.share("fexed", "abc123", "dexef", "lasagna");
+            dataContainer.share("fexed", "abc123", "dexef", "lasagna");
+            dataContainer.share("fexed", "abc123", "dexef", "lenovo");
+            dataContainer.share("fexed", "abc123", "dexef", "lenovo");
+            dataContainer.share("fexed", "abc123", "dexef", "lenovo");
+            dataContainer.share("fexed", "abc123", "dexef", "lenovo");
+            dataContainer.share("fexed", "abc123", "dexef", "lenovo");
+            dataContainer.share("fexed", "abc123", "dexef", "lenovo");
+            dataContainer.share("fexed", "abc123", "dexef", "lenovo");
+            dataContainer.share("fexed", "abc123", "dexef", "lenovo");
+            dataContainer.share("fexed", "abc123", "dexef", "lenovo");
             dataContainer.share("fexed", "abc123", "dexef", "lenovo");
             dataContainer.remove("dexef", "321cba", "lasagna");
-            assertEquals(dataContainer.getDataN("dexef", "321cba"), 6);
+            assertEquals(dataContainer.getDataN("dexef", "321cba"), 25);
+            dataContainer.share("dexef", "321cba", "fexed", "gabbiano");
+            dataContainer.share("dexef", "321cba", "fexed", "gabbiano");
+            dataContainer.share("dexef", "321cba", "fexed", "gabbiano");
+            dataContainer.share("dexef", "321cba", "fexed", "gabbiano");
+            dataContainer.share("dexef", "321cba", "fexed", "gabbiano");
+            dataContainer.share("dexef", "321cba", "fexed", "gabbiano");
+            dataContainer.share("dexef", "321cba", "fexed", "gabbiano");
+            assertEquals(dataContainer.getDataN("fexed", "abc123"), 13);
         } catch (SecureDataContainer.UserNotFoundException ex) {
             fail("UserNotFoundException");
         } catch (SecureDataContainer.InvalidPasswordException ex) {
@@ -180,7 +207,7 @@ public class TestMatrix {
         } catch (SecureDataContainer.InvalidDataException ex) {
             fail("InvalidDataException");
         } catch(SecureDataContainer.DataNotOwnedException ex) {
-            fail("DataNotOwnedException");  
+            fail("InvalidDataException");  
         }
         printData();
     }
