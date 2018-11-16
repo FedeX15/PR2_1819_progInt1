@@ -99,22 +99,89 @@ public class MainClass {
                 
                 case "O":
                 case "o":
-                    
+                    System.out.print("Nome utente: ");
+                    usr = in.next();
+                    System.out.print("Password: ");
+                    pwd = in.next();
+                    System.out.print("Stringa da ottenere: ");
+                    data = in.next();
+                    try {
+                        container.get(usr, pwd, data);
+                    } catch (SecureDataContainer.UserNotFoundException ex) {
+                        System.out.println("***ERRORE: utente non esistente");
+                    } catch (SecureDataContainer.InvalidPasswordException ex) {
+                        System.out.println("***ERRORE: password errata");
+                    } catch (SecureDataContainer.InvalidDataException ex) {
+                        System.out.println("***ERRORE: dato non valido");
+                    } catch (SecureDataContainer.DataNotOwnedException ex) {
+                        System.out.println("***ERRORE: dato non posseduto dall'utente");
+                    }
                     break;
                 
                 case "R":
                 case "r":
-                    
+                    System.out.print("Nome utente: ");
+                    usr = in.next();
+                    System.out.print("Password: ");
+                    pwd = in.next();
+                    System.out.print("Stringa da rimuovere: ");
+                    data = in.next();
+                    try {
+                        container.remove(usr, pwd, data);
+                    } catch (SecureDataContainer.UserNotFoundException ex) {
+                        System.out.println("***ERRORE: utente non esistente");
+                    } catch (SecureDataContainer.InvalidPasswordException ex) {
+                        System.out.println("***ERRORE: password errata");
+                    } catch (SecureDataContainer.InvalidDataException ex) {
+                        System.out.println("***ERRORE: dato non valido");
+                    } catch (SecureDataContainer.DataNotOwnedException ex) {
+                        System.out.println("***ERRORE: dato non posseduto dall'utente");
+                    }
                     break;
                     
                 case "C":
                 case "c":
-                    
+                    System.out.print("Nome utente: ");
+                    usr = in.next();
+                    System.out.print("Password: ");
+                    pwd = in.next();
+                    System.out.print("Stringa da copiare: ");
+                    data = in.next();
+                    try {
+                        container.copy(usr, pwd, data);
+                    } catch (SecureDataContainer.UserNotFoundException ex) {
+                        System.out.println("***ERRORE: utente non esistente");
+                    } catch (SecureDataContainer.InvalidPasswordException ex) {
+                        System.out.println("***ERRORE: password errata");
+                    } catch (SecureDataContainer.InvalidDataException ex) {
+                        System.out.println("***ERRORE: dato non valido");
+                    } catch (SecureDataContainer.DataNotOwnedException ex) {
+                        System.out.println("***ERRORE: dato non posseduto dall'utente");
+                    }
                     break;
                     
                 case "S":
                 case "s":
-                    
+                    String other;
+                    System.out.print("Nome utente: ");
+                    usr = in.next();
+                    System.out.print("Password: ");
+                    pwd = in.next();
+                    System.out.print("Utente in cui condividere: ");
+                    other = in.next();
+                    System.out.print("Stringa da condividere: ");
+                    data = in.next();
+                    try {
+                        container.share(usr, pwd, other, data);
+                    } catch (SecureDataContainer.UserNotFoundException ex) {
+                        System.out.println("***ERRORE: utente non esistente");
+                    } catch (SecureDataContainer.InvalidPasswordException ex) {
+                        System.out.println("***ERRORE: password errata");
+                    } catch (SecureDataContainer.InvalidDataException ex) {
+                        System.out.println("***ERRORE: dato non valido");
+                    } catch (SecureDataContainer.DataNotOwnedException ex) {
+                        System.out.println("***ERRORE: dato non posseduto dall'utente");
+                    }
                     break;
                     
                 case "Z":
