@@ -7,7 +7,16 @@ import java.util.Iterator;
  * @author Federico Matteoni
  */
 public abstract class HashMapSecureDataContainer<E> implements SecureDataContainer<E> {
-    private HashMap<String, Integer> usrPwd;
+    /*
+    OVERVIEW: gli oggetti del tipo HashMapDataContainer<E> sono collezioni
+    modificabili di oggetti di tipo E assegnati ad una coppia utente-password
+    TYPICAL ELEMENT:
+        usrPwd: <<nome-1, pwd-1>, <nome-2, pwd-2>, ..., <nome-n, pwd-n>>
+                con i!=j => nome-i != nome-j
+        usrData: <<nome-1, <data-1-1, ..., data-1-m1>, ...,
+                 <nome-n, <data-n-1, ..., data-n-mn>>
+    */
+    private HashMap<String, String> usrPwd;
     private HashMap<String, ArrayList<E>> usrData;
         
     public HashMapSecureDataContainer() {
@@ -19,7 +28,7 @@ public abstract class HashMapSecureDataContainer<E> implements SecureDataContain
     public void createUser(String id, String passw) throws InvalidUserException{
         if (id != null && passw != null) {
             if (!(usrPwd.containsKey(id))) {
-                usrPwd.put(id, passw.hashCode());
+                usrPwd.put(id, passw);
                 usrData.put(id, new ArrayList<>());
             } else throw new InvalidUserException();
         } else throw new NullPointerException();
@@ -29,7 +38,7 @@ public abstract class HashMapSecureDataContainer<E> implements SecureDataContain
     public int getSize(String owner, String passw) throws UserNotFoundException, InvalidPasswordException {
         if (owner != null && passw != null) {
             if (usrPwd.containsKey(owner)) {
-                if (usrPwd.get(owner).equals(passw.hashCode())) {
+                if (usrPwd.get(owner).equals(passw)) {
                     return usrData.get(owner).size();
                 } else throw new InvalidPasswordException();
             } else throw new UserNotFoundException();
@@ -40,7 +49,7 @@ public abstract class HashMapSecureDataContainer<E> implements SecureDataContain
     public boolean put(String owner, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException {
         if (owner != null && passw != null && data != null) {
             if (usrPwd.containsKey(owner)) {
-                if (usrPwd.get(owner).equals(passw.hashCode())) {
+                if (usrPwd.get(owner).equals(passw)) {
                     if (verifyData(data)) {
                         usrData.get(owner).add(data);
                         return true;
@@ -54,7 +63,7 @@ public abstract class HashMapSecureDataContainer<E> implements SecureDataContain
     public E get(String owner, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException {
         if (owner != null && passw != null && data != null) {
             if (usrPwd.containsKey(owner)) {
-                if (usrPwd.get(owner).equals(passw.hashCode())) {
+                if (usrPwd.get(owner).equals(passw)) {
                     if (verifyData(data)) {
                         for (E s : usrData.get(owner)) {
                             if (s.equals(data)) return data;
@@ -70,7 +79,7 @@ public abstract class HashMapSecureDataContainer<E> implements SecureDataContain
     public E remove(String owner, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException {
         if (owner != null && passw != null && data != null) {
             if (usrPwd.containsKey(owner)) {
-                if (usrPwd.get(owner).equals(passw.hashCode())) {
+                if (usrPwd.get(owner).equals(passw)) {
                     if (verifyData(data)) {
                         for (int i = 0; i < usrData.size(); i++) {
                             if (usrData.get(owner).get(i).equals(data)) {
@@ -89,7 +98,7 @@ public abstract class HashMapSecureDataContainer<E> implements SecureDataContain
     public void copy(String owner, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException {
         if (owner != null && passw != null && data != null) {
             if (usrPwd.containsKey(owner)) {
-                if (usrPwd.get(owner).equals(passw.hashCode())) {
+                if (usrPwd.get(owner).equals(passw)) {
                     if (verifyData(data)) {
                         if (usrData.get(owner).contains(data)) {
                                 usrData.get(owner).add(data);
@@ -105,7 +114,7 @@ public abstract class HashMapSecureDataContainer<E> implements SecureDataContain
         if (owner != null && passw != null && other != null && data != null) {
             if (usrPwd.containsKey(owner)) {
                 if (usrPwd.containsKey(other)) {
-                    if (usrPwd.get(owner).equals(passw.hashCode())) {
+                    if (usrPwd.get(owner).equals(passw)) {
                         if (verifyData(data)) {
                             if (usrData.get(owner).contains(data)) {
                                 usrData.get(other).add(data);
@@ -121,7 +130,7 @@ public abstract class HashMapSecureDataContainer<E> implements SecureDataContain
     public Iterator<E> getIterator(String owner, String passw) throws UserNotFoundException, InvalidPasswordException {
         if (owner != null && passw != null) {
             if (usrPwd.containsKey(owner)) {
-                if (usrPwd.get(owner).equals(passw.hashCode())) {
+                if (usrPwd.get(owner).equals(passw)) {
                     return usrData.get(owner).iterator();
                 } else throw new InvalidPasswordException();
             } else throw new UserNotFoundException();
@@ -132,7 +141,7 @@ public abstract class HashMapSecureDataContainer<E> implements SecureDataContain
     public boolean verifyUser(String user, String passw) throws UserNotFoundException, InvalidPasswordException {
         if (user != null && passw != null) {
             if (usrPwd.containsKey(user)) {
-                if (usrPwd.get(user).equals(passw.hashCode())) {
+                if (usrPwd.get(user).equals(passw)) {
                     return true;
                 } else throw new InvalidPasswordException();
             } else throw new UserNotFoundException();
@@ -143,7 +152,7 @@ public abstract class HashMapSecureDataContainer<E> implements SecureDataContain
     public boolean verifyOwnership(String user, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException {
         if (user != null && passw != null && data != null) {
             if (usrPwd.containsKey(user)) {
-                if (usrPwd.get(user).equals(passw.hashCode())) {
+                if (usrPwd.get(user).equals(passw)) {
                     if (verifyData(data)) {
                         for (E s : usrData.get(user)) {
                             if (s.equals(data)) return true;

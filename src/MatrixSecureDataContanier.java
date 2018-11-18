@@ -2,37 +2,34 @@ import java.util.Iterator;
 
 /**
  * Implementaizione di SecureDataContainer con una matrice
- * Matrice ij
- *  i: numero utenti
- *  j: numero dati
- *  Mij = n >= 0
- *      0 -> il dato j non appartiene alla collezione dell'utente i
- *      n -> il dato j appartiene alla collezione dell'utente i in n copie
  * @author Federico Matteoni
  */
 public abstract class MatrixSecureDataContanier<E> implements SecureDataContainer<E> {
+    /*
+    OVERVIEW: Gli oggetti del tipo MatrixSecureDataContainer<E> sono
+    collezioni modificabili di oggetti di tipo E assegnati ad una coppia
+    utente-password
+    TYPICAL ELEMENT:
+        usrs: <usr-1, usr-2, ..., usr-n>
+        pwds: <pwd-1, pwd-2, ..., pwd-n>
+        data: <data-1, data-2, ..., data-m>
+        usrData: matrice di n x m
+            n = |usrs|
+            m = |data|
+            usrData[i][j] = c >= 0
+                c = 0 -> il dato j non appartiene alla collezione dell'utente i
+                c >= 0 -> il dato j appartiene alla collezione dell'utente i in
+                          n copie
+    */
     private int[][] usrData;
     private String[] usrs;
     private String[] pwds;
     protected E[] data;
 
-    /*Matrice ij
-    i: numero utenti
-    j: numero dati
-    Mij = n >= 0
-        0 -> il dato j non appartiene alla collezione dell'utente i
-        n -> il dato j appartiene alla collezione dell'utente i in n copie
-    
-    Array utenti: posizione i utente <nome-i>
-    Array password: posizione i password <pwd-i> dell'utente <nome-i>
-    Array dati: posizione j dato <dato-j>
-    */
-    
     public MatrixSecureDataContanier() {
         usrData = new int[0][0];
         usrs = new String[0];
         pwds = new String[0];
-        //data = new E[0];
     }
     
     public void printMatrix() {
