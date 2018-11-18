@@ -75,7 +75,17 @@ public class TotalTest {
             container.put("dexef", "321cba", "stringa con spa z i");
             container.put("dexef", "321cba", "boh altra roba");
             assertEquals(container.getDataN("dexef", "321cba"), 4);
-            assertEquals(container.getDataN("arduino", "nano"), 0);
+            container.put("arduino", "nano", "ojyUBJaZ");
+            container.put("arduino", "nano", "2pBaSuUh");
+            container.put("arduino", "nano", "J7NWHjrs");
+            container.put("arduino", "nano", "y8UeXiXo");
+            container.put("arduino", "nano", "RmVgUXoT");
+            container.put("arduino", "nano", "cNV6mwvS");
+            container.put("arduino", "nano", "f20wmLKM");
+            container.put("arduino", "nano", "qkB42iYv");
+            container.put("arduino", "nano", "Jcu9ZG7f");
+            container.put("arduino", "nano", "4sZaty6t");
+            assertEquals(container.getDataN("arduino", "nano"), 10);
             container.put("raspberry", "3.14159265", "torta");
             container.put("raspberry", "3.14159265", "scheda elettronica");
             container.put("raspberry", "3.14159265", "chip");
@@ -130,6 +140,14 @@ public class TotalTest {
             container.share("dexef", "321cba", "fexed", "gabbiano");
             container.share("dexef", "321cba", "fexed", "gabbiano");
             assertEquals(container.getDataN("fexed", "abc123"), 13);
+            container.share("arduino", "nano", "fexed", "ojyUBJaZ");
+            assertEquals(container.getDataN("fexed", "abc123"), 14);
+            container.share("arduino", "nano", "dexef", "ojyUBJaZ");
+            assertEquals(container.getDataN("dexef", "321cba"), 26);
+            container.share("arduino", "nano", "raspberry", "ojyUBJaZ");
+            assertEquals(container.getDataN("raspberry", "3.14159265"), 4);
+            container.share("arduino", "nano", "temistocle", "ojyUBJaZ");
+            assertEquals(container.getDataN("temistocle", "nonsaprei"), 2);
         } catch (SecureDataContainer.UserNotFoundException ex) {
             fail("UserNotFoundException");
         } catch (SecureDataContainer.InvalidPasswordException ex) {
