@@ -81,7 +81,7 @@ public abstract class HashMapSecureDataContainer<E> implements SecureDataContain
             if (usrPwd.containsKey(owner)) {
                 if (usrPwd.get(owner).equals(passw)) {
                     if (verifyData(data)) {
-                        for (int i = 0; i < usrData.size(); i++) {
+                        for (int i = 0; i < usrData.get(owner).size(); i++) {
                             if (usrData.get(owner).get(i).equals(data)) {
                                 usrData.get(owner).remove(i);
                                 return data;
