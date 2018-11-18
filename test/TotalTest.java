@@ -45,6 +45,7 @@ public class TotalTest {
         addData(container);
         shareData(container);
         errors(container);
+        ((StringMatrix) container).printMatrix();
     }
 
     public void addUsers(SecureDataContainer<String> container) {
@@ -132,6 +133,11 @@ public class TotalTest {
             container.share("fexed", "abc123", "dexef", "lenovo");
             container.remove("dexef", "321cba", "lasagna");
             assertEquals(container.getDataN("dexef", "321cba"), 25);
+            container.remove("dexef", "321cba", "lasagna");
+            container.remove("dexef", "321cba", "lasagna");
+            container.remove("dexef", "321cba", "lasagna");
+            container.remove("dexef", "321cba", "lenovo");
+            assertEquals(container.getDataN("dexef", "321cba"), 21);
             container.share("dexef", "321cba", "fexed", "gabbiano");
             container.share("dexef", "321cba", "fexed", "gabbiano");
             container.share("dexef", "321cba", "fexed", "gabbiano");
@@ -143,7 +149,7 @@ public class TotalTest {
             container.share("arduino", "nano", "fexed", "ojyUBJaZ");
             assertEquals(container.getDataN("fexed", "abc123"), 14);
             container.share("arduino", "nano", "dexef", "ojyUBJaZ");
-            assertEquals(container.getDataN("dexef", "321cba"), 26);
+            assertEquals(container.getDataN("dexef", "321cba"), 22);
             container.share("arduino", "nano", "raspberry", "ojyUBJaZ");
             assertEquals(container.getDataN("raspberry", "3.14159265"), 4);
             container.share("arduino", "nano", "temistocle", "ojyUBJaZ");
@@ -200,13 +206,13 @@ public class TotalTest {
         
         try {
             container.get("fexed", "abc123", "Frank Sinatra");
-            fail("Utente fexed non ha dato DataNotOwnedException o InvalidDataException");
+            fail("Utente fexed non ha dato DataNotOwnedException");
         } catch (SecureDataContainer.UserNotFoundException ex) {
             fail("UserNotFoundException");
         } catch (SecureDataContainer.InvalidPasswordException ex) {
             fail("InvalidPasswordException");
         } catch (SecureDataContainer.InvalidDataException ex) {
-            fail("DataNotOwned");
+            fail("DataNotOwnedException");
         } catch (SecureDataContainer.DataNotOwnedException ex) {
         }
     }
