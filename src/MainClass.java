@@ -38,8 +38,11 @@ public class MainClass {
                     + "\tR\tRimuovi un dato dalla collezione di un utente\n"
                     + "\tC\tCopia un dato nella collezione dell'utente\n"
                     + "\tS\tCondividi un dato nella collezione di un altro utente\n"
-                    + "\tZ\tStampa lo stato della collezione di un utente\n"
-                    + "\tX\tChiudi\n\t");
+                    + "\tZ\tStampa lo stato della collezione di un utente\n");
+            if (container instanceof StringMatrix) {
+                System.out.print("\tM\tStampa la matrice della collezione\n");
+            }
+            System.out.print("\tX\tChiudi\n\t");
             c = in.next();
             
             switch (c) {
@@ -201,7 +204,11 @@ public class MainClass {
                     } catch (SecureDataContainer.InvalidPasswordException ex) {
                         System.out.println("***ERRORE: password errata");
                     }
+                    break;
                     
+                case "M":
+                case "m":
+                    if (container instanceof StringMatrix) ((StringMatrix) container).printMatrix();
                     break;
             }
 
