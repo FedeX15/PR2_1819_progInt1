@@ -206,6 +206,8 @@ public class TotalTest {
         } catch (SecureDataContainer.InvalidPasswordException ex) {
             fail("InvalidPasswordException");
         } catch (SecureDataContainer.InvalidDataException ex) {
-        } catch (SecureDataContainer.DataNotOwnedException ex) {}
+            fail("DataNotOwned");
+        } catch (SecureDataContainer.DataNotOwnedException ex) {
+        }
     }
 }

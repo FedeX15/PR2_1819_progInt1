@@ -181,7 +181,7 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
                             if (usrData[n][m] > 0) {
                                 return data;
                             } else throw new DataNotOwnedException();
-                        } else throw new InvalidDataException();
+                        } else throw new DataNotOwnedException();
                     } else throw new InvalidDataException();
                 } else throw new InvalidPasswordException();
             } else throw new UserNotFoundException();
