@@ -109,7 +109,7 @@ public class MainClass {
                     System.out.print("Stringa da ottenere: ");
                     data = in.next();
                     try {
-                        container.get(usr, pwd, data);
+                        System.out.println("Ottenuto " + container.get(usr, pwd, data) + " dalla collezione di " + usr);
                     } catch (SecureDataContainer.UserNotFoundException ex) {
                         System.out.println("***ERRORE: utente non esistente");
                     } catch (SecureDataContainer.InvalidPasswordException ex) {
@@ -130,7 +130,7 @@ public class MainClass {
                     System.out.print("Stringa da rimuovere: ");
                     data = in.next();
                     try {
-                        container.remove(usr, pwd, data);
+                        System.out.println("Rimosso " + container.remove(usr, pwd, data) + " dalla collezione di " + usr);
                     } catch (SecureDataContainer.UserNotFoundException ex) {
                         System.out.println("***ERRORE: utente non esistente");
                     } catch (SecureDataContainer.InvalidPasswordException ex) {
@@ -152,6 +152,7 @@ public class MainClass {
                     data = in.next();
                     try {
                         container.copy(usr, pwd, data);
+                         System.out.println("Copiato " + data + " nella collezione di " + usr);
                     } catch (SecureDataContainer.UserNotFoundException ex) {
                         System.out.println("***ERRORE: utente non esistente");
                     } catch (SecureDataContainer.InvalidPasswordException ex) {
@@ -176,6 +177,7 @@ public class MainClass {
                     data = in.next();
                     try {
                         container.share(usr, pwd, other, data);
+                         System.out.println("Condiviso " + data + " nella collezione di " + other);
                     } catch (SecureDataContainer.UserNotFoundException ex) {
                         System.out.println("***ERRORE: utente non esistente");
                     } catch (SecureDataContainer.InvalidPasswordException ex) {
