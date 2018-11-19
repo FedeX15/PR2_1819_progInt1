@@ -33,6 +33,8 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
                per ogni 0 <= i < c.usrs.length)
            && (c.usrData[i][j] >= 0 perogni 0 <= i < c.usrs.length
                && 0 <= j < c.data.length)
+           && (i != j => c.usrs[i] != c.usrs[j]
+               per ogni 0 <= i,j < c.usrs.length)
     */
     private int[][] usrData;
     private String[] usrs;
@@ -43,7 +45,12 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
         usrData = new int[0][0];
         usrs = new String[0];
         pwds = new String[0];
+        //data = new E[0];
     }
+    /*
+    I(c) valida poiché usrData.length = usrs.length = pwds.length = 0
+    */
+      
     
     public void printMatrix() {
         for (int i = 0; i < usrData.length; i++) {
@@ -77,6 +84,9 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
             for (int j = 0; j < m[i].length; j++) {
                 newM[i][j] = m[i][j];
             }
+            for (int j = 0; j < newM[newM.length-1].length; j++) {
+                newM[newM.length-1][j] = 0;
+            }
         }
         return newM;
     }
@@ -101,12 +111,15 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
                 usrs[usrs.length - 1] = id;
                 pwds[pwds.length - 1] = passw;
                 usrData = addRow(usrData);
-                for (int j = 0; j < usrData[usrData.length-1].length; j++) {
-                    usrData[usrData.length-1][j] = 0;
-                }
             } else throw new InvalidUserException();
         } else throw new NullPointerException();
     }
+    /*
+    I(c) valida perché incrementa usrs, pwds e le righe di usrData insieme, e fa
+    ciò solamente se id non è già presente in usrs. Inoltre all'inserimento di
+    una nuova riga, tale riga è inizializzata a tutti 0, mantendo
+    usrData[i][j] >= 0 per ogni 0 <= i < usrs.length && 0 <= j < data.length
+    */
 
     @Override
     public int getSize(String owner, String passw) throws UserNotFoundException, InvalidPasswordException {
@@ -132,7 +145,6 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
 
     @Override
     public boolean put(String owner, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException {
-        
         if (owner != null && passw != null && data != null) {
             if (checkExistingUser(owner)) {
                 int n = -1;
@@ -166,6 +178,13 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
             } else throw new UserNotFoundException();
         } else throw new NullPointerException();
     }
+    /*
+    I(c) valida poiché in caso di validità dei parametri, sia le colonne di
+    usrData che la lunghezza di data viene incrementata di 1 in caso di dato
+    nuovo.
+    La posizione relativa al dato, m se è già presente o l'ultima posizione di 
+    data se il dato è nuovo, viene poi incrementata di 1.
+    */
 
     @Override
     public E get(String owner, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException {
@@ -229,6 +248,12 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
             } else throw new UserNotFoundException();
         } else throw new NullPointerException();
     }
+    /*
+    I(c) è valida poiché se il dato è presente nella collezione e i parametri
+    sono validi, la posizione relativa al dato nella riga dell'utente è
+    decrementata di 1 solo se la posizione ha valore > 0, mantenendo la
+    validità dell'invariante
+    */
 
     @Override
     public void copy(String owner, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException {
@@ -251,13 +276,20 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
                             }
                         }
                         if (m != -1) {
-                            usrData[n][m]++;
+                            if (usrData[n][m] > 0) {
+                                usrData[n][m]++;
+                            } else throw new DataNotOwnedException();
                         } else throw new InvalidDataException();
                     } else throw new InvalidDataException();
                 } else throw new InvalidPasswordException();
             } else throw new UserNotFoundException();
         } else throw new NullPointerException();
     }
+    /*
+    I(c) valida poiché se i parametri sono validi incrementa semplicemente il
+    contatore relativo al dato nella collezione di owner solo se aveva almeno
+    una copia di tale dato
+    */
 
     @Override
     public void share(String owner, String passw, String other, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException {
@@ -298,6 +330,11 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
             } else throw new UserNotFoundException();
         } else throw new NullPointerException();
     }
+    /*
+    I(c) valida poiché se i parametri sono validi va a incrementare il contatore
+    relativo al dato nella collezione di other solo se owner ha almeno una
+    copia del dato.
+    */
 
     @Override
     public Iterator<E> getIterator(String owner, String passw) throws UserNotFoundException, InvalidPasswordException {
