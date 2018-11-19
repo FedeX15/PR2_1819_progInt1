@@ -15,6 +15,16 @@ public abstract class HashMapSecureDataContainer<E> implements SecureDataContain
                 con i!=j => nome-i != nome-j
         usrData: <<nome-1, <data-1-1, ..., data-1-m1>, ...,
                  <nome-n, <data-n-1, ..., data-n-mn>>
+    
+    a(c) = {(c.usrPwd.get(s), c.usrData.get(s).get(i)) | c.usrPwd.containsKey(s)
+           && c.usrData.containsKey(s) && 0 <= i < c.usrData.get(s).size()}
+    
+    I(c) = c.usrPwd != null
+           && (c.usrData != null)
+           && (c.usrPwd.containsKey(s) => c.usrData.containsKey(s))
+           && (c.usrPwd.size() <= c.usrData.size())
+           && (c.verifyData(c.usrData.get(s).get(i)) per ogni s,i |
+              c.usrData.contains(s) && 0 <= i < c.usrData.get(s).size())
     */
     private HashMap<String, String> usrPwd;
     private HashMap<String, ArrayList<E>> usrData;
