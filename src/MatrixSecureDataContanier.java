@@ -55,7 +55,7 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
     public void printMatrix() {
         for (int i = 0; i < usrData.length; i++) {
             for (int j = 0; j < data.length; j++) {
-                System.out.print(" " + usrData[i][j]);
+                System.out.print(" " + ((usrData[i][j] > 9) ? "+" : usrData[i][j]));
             }
             System.out.println("\t" + usrs[i]);
         }
