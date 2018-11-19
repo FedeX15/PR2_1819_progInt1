@@ -16,8 +16,9 @@ public abstract class HashMapSecureDataContainer<E> implements SecureDataContain
         usrData: <<nome-1, <data-1-1, ..., data-1-m1>, ...,
                  <nome-n, <data-n-1, ..., data-n-mn>>
     
-    a(c) = {(c.usrPwd.get(s), c.usrData.get(s).get(i)) | c.usrPwd.containsKey(s)
-           && c.usrData.containsKey(s) && 0 <= i < c.usrData.get(s).size()}
+    a(c) = {(s, c.usrPwd.get(s), c.usrData.get(s).get(i)) |
+           c.usrPwd.containsKey(s) && c.usrData.containsKey(s)
+           && 0 <= i < c.usrData.get(s).size()}
     
     I(c) = (c.usrPwd != null)
            && (c.usrData != null)
