@@ -29,9 +29,10 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
            && (c.data != null)
            && (c.usrData != null)
            && (c.usrs.length = c.pwds.length = c.usrData.length)
-           && (c.usrData[i].length = c.data.length perogni 0 <= i < c.usrs.length)
+           && (c.usrData[i].length = c.data.length 
+               per ogni 0 <= i < c.usrs.length)
            && (c.usrData[i][j] >= 0 perogni 0 <= i < c.usrs.length
-              && 0 <= j < c.data.length)
+               && 0 <= j < c.data.length)
     */
     private int[][] usrData;
     private String[] usrs;
