@@ -20,6 +20,18 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
                 c = 0 -> il dato j non appartiene alla collezione dell'utente i
                 c >= 0 -> il dato j appartiene alla collezione dell'utente i in
                           n copie
+    
+    a(c) = {(c.usrs[i], c.pwds[i], c.data[j]) | 0 <= i < c.usrs.length
+           && 0 <= j < c.usrData[i].length && c.usrData[i][j] > 0}
+    
+    I(c) = (c.usrs != null)
+           && (c.pwds != null)
+           && (c.data != null)
+           && (c.usrData != null)
+           && (c.usrs.length = c.pwds.length = c.usrData.length)
+           && (c.usrData[i].length = c.data.length perogni 0 <= i < c.usrs.length)
+           && (c.usrData[i][j] >= 0 perogni 0 <= i < c.usrs.length
+              && 0 <= j < c.data.length)
     */
     private int[][] usrData;
     private String[] usrs;
