@@ -215,5 +215,18 @@ public class TotalTest {
             fail("DataNotOwnedException");
         } catch (SecureDataContainer.DataNotOwnedException ex) {
         }
+        
+        try {
+            container.copy("fexed", "abc123", "stringa con spa z i");
+            fail("Utente fexed non ha dato DataNotOwnedException");
+        } catch (SecureDataContainer.UserNotFoundException ex) {
+            fail("UserNotFoundException");
+        } catch (SecureDataContainer.InvalidPasswordException ex) {
+            fail("InvalidPasswordException");
+        } catch (SecureDataContainer.InvalidDataException ex) {
+            fail("DataNotOwnedException");
+        } catch (SecureDataContainer.DataNotOwnedException ex) {
+        }
+        
     }
 }
