@@ -18,8 +18,8 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
             m = |data|
             usrData[i][j] = c >= 0
                 c = 0 -> il dato j non appartiene alla collezione dell'utente i
-                c >= 0 -> il dato j appartiene alla collezione dell'utente i in
-                          n copie
+                c > 0 -> il dato j appartiene alla collezione dell'utente i in
+                          c copie
     
     a(c) = {(c.usrs[i], c.pwds[i], c.data[j]) | 0 <= i < c.usrs.length
            && 0 <= j < c.usrData[i].length && c.usrData[i][j] > 0}
@@ -35,6 +35,8 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
                && 0 <= j < c.data.length)
            && (i != j => c.usrs[i] != c.usrs[j]
                per ogni 0 <= i,j < c.usrs.length)
+           && (i != j => c.data[i] != c.data[j]
+               per ogni 0 <= i,j < c.data.length)
     */
     private int[][] usrData;
     private String[] usrs;

@@ -22,7 +22,7 @@ public abstract class HashMapSecureDataContainer<E> implements SecureDataContain
     
     I(c) = (c.usrPwd != null)
            && (c.usrData != null)
-           && (c.usrPwd.containsKey(s) => c.usrData.containsKey(s))
+           && (c.usrData.containsKey(s) => c.usrPwd.containsKey(s))
            && (c.usrPwd.size() <= c.usrData.size())
            && (c.verifyData(c.usrData.get(s).get(i)) per ogni s,i |
               c.usrData.contains(s) && 0 <= i < c.usrData.get(s).size())
