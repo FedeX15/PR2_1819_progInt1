@@ -190,6 +190,7 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
 
     @Override
     public E get(String owner, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException {
+        E newdata = data;
         if (owner != null && passw != null && data != null) {
             if (checkExistingUser(owner)) {
                 int n = -1;
@@ -210,7 +211,7 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
                         }
                         if (m != -1) {
                             if (usrData[n][m] > 0) {
-                                return data;
+                                return newdata;
                             } else throw new DataNotOwnedException();
                         } else throw new DataNotOwnedException();
                     } else throw new InvalidDataException();

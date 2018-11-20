@@ -72,12 +72,13 @@ public abstract class HashMapSecureDataContainer<E> implements SecureDataContain
 
     @Override
     public E get(String owner, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException {
+        E datacopy = data;
         if (owner != null && passw != null && data != null) {
             if (usrPwd.containsKey(owner)) {
                 if (usrPwd.get(owner).equals(passw)) {
                     if (verifyData(data)) {
                         for (E s : usrData.get(owner)) {
-                            if (s.equals(data)) return data;
+                            if (s.equals(data)) return datacopy;
                         }
                         throw new DataNotOwnedException();
                     } else throw new InvalidDataException();
