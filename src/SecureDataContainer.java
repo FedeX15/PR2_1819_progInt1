@@ -2,8 +2,8 @@ import java.util.Iterator;
 
 /**
  * Data Storage per la memorizzazione e condivisione sicura di oggetti di tipo E
- * @author Federico Matteoni
- * @param <E> il tipo degli oggetti contenuti
+ * AUTHOR Federico Matteoni
+ * PARAM <E> il tipo degli oggetti contenuti
  */
 public interface SecureDataContainer<E> {
     //OVERVIEW: Gli oggetti di tipo SecureDataContainer sono collezioni

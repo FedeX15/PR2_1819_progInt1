@@ -2,7 +2,7 @@ import java.util.Iterator;
 
 /**
  * Implementaizione di SecureDataContainer con una matrice
- * @author Federico Matteoni
+ * AUTHOR Federico Matteoni
  */
 public abstract class MatrixSecureDataContanier<E> implements SecureDataContainer<E> {
     /*

@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 /**
  * Implementazione di SecureDataContainer.java con HashMap
- * @author Federico Matteoni
+ * AUTHOR Federico Matteoni
  */
 public abstract class HashMapSecureDataContainer<E> implements SecureDataContainer<E> {
     /*
