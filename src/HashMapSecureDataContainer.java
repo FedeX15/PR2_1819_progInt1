@@ -44,6 +44,12 @@ public abstract class HashMapSecureDataContainer<E> implements SecureDataContain
             } else throw new InvalidUserException();
         } else throw new NullPointerException();
     }
+    /*
+    I(c) valida perché id è aggiunto solo se nell'hashmap usrPwd non è presente
+    una mappatura con chiave uguale a id.
+    Se id è aggiunto in usrPwd, con assegnato valore passw è anche aggiunto a
+    usrData con un arraylist vuoto.
+    */
 
     @Override
     public int getSize(String owner, String passw) throws UserNotFoundException, InvalidPasswordException {
@@ -69,6 +75,9 @@ public abstract class HashMapSecureDataContainer<E> implements SecureDataContain
             } else throw new UserNotFoundException();
         } else throw new NullPointerException();
     }
+    /*
+    I(c) valida perché data è aggiunto solo quando è verificato
+    */
 
     @Override
     public E get(String owner, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException {
@@ -86,9 +95,13 @@ public abstract class HashMapSecureDataContainer<E> implements SecureDataContain
             } else throw new UserNotFoundException();
         } else throw new NullPointerException();
     }
+    /*
+    I(c) valida perché data è ritornato solo se presente nella collezione
+    */
 
     @Override
     public E remove(String owner, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException {
+        E datacopy = data;
         if (owner != null && passw != null && data != null) {
             if (usrPwd.containsKey(owner)) {
                 if (usrPwd.get(owner).equals(passw)) {
@@ -96,7 +109,7 @@ public abstract class HashMapSecureDataContainer<E> implements SecureDataContain
                         for (int i = 0; i < usrData.get(owner).size(); i++) {
                             if (usrData.get(owner).get(i).equals(data)) {
                                 usrData.get(owner).remove(i);
-                                return data;
+                                return datacopy;
                             }
                         }
                         return null;
@@ -105,6 +118,10 @@ public abstract class HashMapSecureDataContainer<E> implements SecureDataContain
             } else throw new UserNotFoundException();
         } else throw new NullPointerException();
     }
+    /*
+    I(c) valida perché data è rimosso solo se presente nella collezione e viene
+    rimossa la prima occorrenza
+    */
 
     @Override
     public void copy(String owner, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException {
