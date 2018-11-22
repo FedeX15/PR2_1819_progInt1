@@ -76,7 +76,8 @@ public abstract class HashMapSecureDataContainer<E> implements SecureDataContain
         } else throw new NullPointerException();
     }
     /*
-    I(c) valida perché data è aggiunto solo quando è verificato
+    I(c) valida perché data è aggiunto solo quando è verificato e ciò non va ad
+    invalidare nessuna delle condizioni della I(c)
     */
 
     @Override
@@ -96,7 +97,8 @@ public abstract class HashMapSecureDataContainer<E> implements SecureDataContain
         } else throw new NullPointerException();
     }
     /*
-    I(c) valida perché data è ritornato solo se presente nella collezione
+    I(c) valida perché data è ritornato solo se presente nella collezione e ciò
+    non va ad invalidare nessuna delle condizioni della I(c)
     */
 
     @Override
@@ -120,33 +122,41 @@ public abstract class HashMapSecureDataContainer<E> implements SecureDataContain
     }
     /*
     I(c) valida perché data è rimosso solo se presente nella collezione e viene
-    rimossa la prima occorrenza
+    rimossa la prima occorrenza e ciò non va ad invalidare nessuna
+    delle condizioni della I(c)
     */
 
     @Override
     public void copy(String owner, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException {
+        E dataCopy = data;
         if (owner != null && passw != null && data != null) {
             if (usrPwd.containsKey(owner)) {
                 if (usrPwd.get(owner).equals(passw)) {
                     if (verifyData(data)) {
                         if (usrData.get(owner).contains(data)) {
-                                usrData.get(owner).add(data);
+                                usrData.get(owner).add(dataCopy);
                             } else throw new DataNotOwnedException();
                     } else throw new InvalidDataException();
                 } else throw new InvalidPasswordException();
             } else throw new UserNotFoundException();
         } else throw new NullPointerException();
     }
+    /*
+    I(c) valida perché una copia di data è messa nella collezione di owner solo
+    se owner già possiede una copia di data e ciò non va ad invalidare nessuna
+    delle condizioni della I(c)
+    */
 
     @Override
     public void share(String owner, String passw, String other, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException {
+        E dataCopy = data;
         if (owner != null && passw != null && other != null && data != null) {
             if (usrPwd.containsKey(owner)) {
                 if (usrPwd.containsKey(other)) {
                     if (usrPwd.get(owner).equals(passw)) {
                         if (verifyData(data)) {
                             if (usrData.get(owner).contains(data)) {
-                                usrData.get(other).add(data);
+                                usrData.get(other).add(dataCopy);
                             } else throw new DataNotOwnedException();
                         } else throw new InvalidDataException();
                     } else throw new InvalidPasswordException();
@@ -154,6 +164,11 @@ public abstract class HashMapSecureDataContainer<E> implements SecureDataContain
             } else throw new UserNotFoundException();
         } else throw new NullPointerException();
     }
+    /*
+    I(c) valida perché una copia di data è messa nella collezione di other solo
+    se owner già possiede una copia di data e ciò non va ad invalidare nessuna
+    delle condizioni della I(c)
+    */
 
     @Override
     public Iterator<E> getIterator(String owner, String passw) throws UserNotFoundException, InvalidPasswordException {
