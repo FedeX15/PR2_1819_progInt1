@@ -32,23 +32,25 @@ public abstract class HashMapSecureDataContainer<E> implements SecureDataContain
         
     public HashMapSecureDataContainer() {
         this.usrPwd = new HashMap();
-        this.usrData = new HashMap();
+        this.usrData = new HashMap(); //Inizializzazione delle due hashmap vuote
     }
             
     @Override
     public void createUser(String id, String passw) throws InvalidUserException{
         if (id != null && passw != null) {
-            if (!(usrPwd.containsKey(id))) {
+            if (!(usrPwd.containsKey(id))) { //se non sono null verifico che il nome utente non sia già usato
                 usrPwd.put(id, passw);
-                usrData.put(id, new ArrayList<>());
+                usrData.put(id, new ArrayList<>()); //in caso non sia usato vado a creare una nuova mappatura in entrambe le hashmap, con chiave il nuovo nome utente
             } else throw new InvalidUserException();
         } else throw new NullPointerException();
     }
     /*
     I(c) valida perché id è aggiunto solo se nell'hashmap usrPwd non è presente
     una mappatura con chiave uguale a id.
-    Se id è aggiunto in usrPwd, con assegnato valore passw è anche aggiunto a
-    usrData con un arraylist vuoto.
+    Se id è aggiunto in usrPwd, con assegnato valore passw, è anche aggiunto a
+    usrData con un arraylist vuoto. Ciò mantiene le condizioni della I(c) di
+    avere una mappatura con chiave id in usrData solo se è presente una
+    mappatura con chiave id in usrPwd
     */
 
     @Override
