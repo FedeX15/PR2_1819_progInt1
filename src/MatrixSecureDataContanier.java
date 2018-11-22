@@ -351,32 +351,32 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
                     }
                 }
                 if (pwds[n].equals(passw)){
-                    final int[] datausr = usrData[n];
-                    final E[] data = this.data;
+                    final int[] datausr = usrData[n]; //preparo vettore delle quantità
+                    final E[] data = this.data; //preparo il vettore dei dati
                     return new Iterator<E>() {
-                        int i = -1;
-                        int c = 0;
+                        int i = -1; //base -1, al primo hasNext va a 0
+                        int c = 0; //memorizza il conteggio del singolo dato
                         
                         @Override
                         public boolean hasNext() {
-                            if (c > 0) return c <= datausr[i];
+                            if (c > 0) return c <= datausr[i]; //finché di questo dato l'utente ha copie devo ritornare questo dato
                             else {
-                                i++;
+                                i++; //vado a vedere dalla posizione successiva il primo conteggio > 0
                                 do {
                                     if (i < data.length) {
                                         c = datausr[i];
-                                        if (c > 0) return true;
-                                        else i++;
+                                        if (c > 0) return true; //se il conteggio è > 0 allora ok, ci sono dati da tornare e sono in posizione i
+                                        else i++; //altrimenti vado a vedere il dato successivo
                                     }
-                                } while (i < data.length);
-                                return false;
+                                } while (i < data.length); //lo faccio per tutti i dati
+                                return false; //se arrivo qua non ci sono più dati o conteggi >0 nella collezione dell'utente, non ho dati successivi
                             }
                         }
 
                         @Override
                         public E next() {
-                            c--;
-                            return data[i];
+                            c--; //decremento il conteggio di questo dato che è sicuramente > 0
+                            return data[i]; //ritorno il dato
                             
                         }
                     };
