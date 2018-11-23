@@ -19,7 +19,7 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
             usrData[i][j] = c >= 0
                 c = 0 -> il dato j non appartiene alla collezione dell'utente i
                 c > 0 -> il dato j appartiene alla collezione dell'utente i in
-                          c copie
+                         c copie
     
     a(c) = {(c.usrs[i], c.pwds[i], c.data[j]) | 0 <= i < c.usrs.length
            && 0 <= j < c.usrData[i].length && c.usrData[i][j] > 0}
@@ -31,8 +31,8 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
            && (c.usrs.length = c.pwds.length = c.usrData.length)
            && (c.usrData[i].length = c.data.length 
                per ogni 0 <= i < c.usrs.length)
-           && (c.usrData[i][j] >= 0 perogni 0 <= i < c.usrs.length
-               && 0 <= j < c.data.length)
+           && (c.usrData[i][j] >= 0 
+               perogni 0 <= i < c.usrs.length && 0 <= j < c.data.length)
            && (i != j => c.usrs[i] != c.usrs[j]
                per ogni 0 <= i,j < c.usrs.length)
            && (i != j => c.data[i] != c.data[j]
@@ -47,39 +47,67 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
         usrData = new int[0][0];
         usrs = new String[0];
         pwds = new String[0];
-        //data = new E[0];
+        //data = new E[0]; //Non possibile con tipi generici, dipende dal tipo E
     }
     /*
     I(c) valida poiché usrData.length = usrs.length = pwds.length = 0
     */
       
-    
+    /*
+    Metodo di utilità per stampare la matrice dei conteggi usrData
+    */
     public void printMatrix() {
         for (int i = 0; i < usrData.length; i++) {
             for (int j = 0; j < data.length; j++) {
                 System.out.print(" " + ((usrData[i][j] > 9) ? "+" : usrData[i][j]));
+                /*
+                stampo il numero di copie, '+' se il numero di copie è a due
+                cifre per mantenere la formattazione
+                */
             }
             System.out.println("\t" + usrs[i]);
+            //allego il nome utente a fine riga
         }
     }
     
+    /*
+    Funzione di utilità per controllare l'esistenza di un nome utente
+    */
     public boolean checkExistingUser(String usr) {
         for (String s : usrs) {
             if (s.equals(usr)) return true;
         }
         return false;
     }
+    /*
+    REQUIRES: usr != null
+    RETURNS: true se usr è presente in usrs, false altrimenti
+    */
     
+    /*
+    Funzione di utilità per incrementare di una posizione il vettore di dati E
+    */
     public abstract E[] increment(E[] v);
+    /*
+    REQUIRES: v != null
+    RETURNS: una copia del vettore v con una posizione in più con valore null
+    */
     
+    //Funzione di utilità per incrementare di una posizione un vettore di String
     public String[] increment(String[] v) {
         String[] newV = new String[v.length + 1];
         for (int i = 0; i < v.length; i++) {
             newV[i] = v[i];
         }
+        newV[newV.length-1] = null;
         return newV;
     }
+    /*
+    REQUIRES: v != null
+    RETURNS: una copia del vettore v con una poszione in più con valore null
+    */
     
+    //Funzione di utilità che aggiunge una riga di 0 ad una matrice di int
     public int[][] addRow(int[][] m) {
         int[][] newM = new int[m.length+1][data.length];
         for (int i = 0; i < m.length; i++) {
@@ -92,7 +120,12 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
         }
         return newM;
     }
+    /*
+    REQUIRES: m != null
+    RETURNS: una matrice newM | newM.length = m.length+1, con l'ultima riga di 0
+    */
     
+    //Funzione di utilità che aggiunge una colonna di 0 ad una matrice di int
     public int[][] addCol(int[][] m) {
         int[][] newM = new int[m.length][data.length+1];
         for (int i = 0; i < m.length; i++) {
@@ -103,6 +136,12 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
         }
         return newM;
     }
+    /*
+    REQUIRES: m != null
+    RETURNS: una matrice newM | 
+             newM[i].length = m[i].length+1 perogni 0 <= i < m.length
+             con l'ultima colonna di 0
+    */
         
     @Override
     public void createUser(String id, String passw) throws InvalidUserException {
