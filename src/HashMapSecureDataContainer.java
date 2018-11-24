@@ -215,12 +215,4 @@ public abstract class HashMapSecureDataContainer<E> implements SecureDataContain
     public int getUsersN() {
         return usrPwd.size();
     }
-
-    @Override
-    public int getDataN(String user, String passw) throws UserNotFoundException, InvalidPasswordException {
-        if (verifyUser(user, passw)) {
-            return usrData.get(user).size();
-        } else return -1;
-    }
-    
 }

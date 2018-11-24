@@ -89,12 +89,12 @@ public class TotalTest {
             container.put("fexed", "abc123", "lenovo");
             container.put("fexed", "abc123", "australopiteco");
             container.put("fexed", "abc123", "stringa");
-            assertEquals(container.getDataN("fexed", "abc123"), 6);
+            assertEquals(container.getSize("fexed", "abc123"), 6);
             container.put("dexef", "321cba", "gabbiano");
             container.put("dexef", "321cba", "stringapiulunga");
             container.put("dexef", "321cba", "stringa con spa z i");
             container.put("dexef", "321cba", "boh altra roba");
-            assertEquals(container.getDataN("dexef", "321cba"), 4);
+            assertEquals(container.getSize("dexef", "321cba"), 4);
             container.put("arduino", "nano", "ojyUBJaZ");
             container.put("arduino", "nano", "2pBaSuUh");
             container.put("arduino", "nano", "J7NWHjrs");
@@ -105,13 +105,13 @@ public class TotalTest {
             container.put("arduino", "nano", "qkB42iYv");
             container.put("arduino", "nano", "Jcu9ZG7f");
             container.put("arduino", "nano", "4sZaty6t");
-            assertEquals(container.getDataN("arduino", "nano"), 10);
+            assertEquals(container.getSize("arduino", "nano"), 10);
             container.put("raspberry", "3.14159265", "torta");
             container.put("raspberry", "3.14159265", "scheda elettronica");
             container.put("raspberry", "3.14159265", "chip");
-            assertEquals(container.getDataN("raspberry", "3.14159265"), 3);
+            assertEquals(container.getSize("raspberry", "3.14159265"), 3);
             container.put("temistocle", "nonsaprei", "santino");
-            assertEquals(container.getDataN("temistocle", "nonsaprei"), 1);
+            assertEquals(container.getSize("temistocle", "nonsaprei"), 1);
         } catch (SecureDataContainer.UserNotFoundException ex) {
             fail("UserNotFoundException sul primo try");
         } catch (SecureDataContainer.InvalidPasswordException ex) {
@@ -125,9 +125,9 @@ public class TotalTest {
     public void shareData(SecureDataContainer<String> container) {
         try {
             container.share("fexed", "abc123", "dexef", "lasagna");
-            assertEquals(container.getDataN("dexef", "321cba"), 5);
+            assertEquals(container.getSize("dexef", "321cba"), 5);
             container.remove("dexef", "321cba", "stringapiulunga");
-            assertEquals(container.getDataN("dexef", "321cba"), 4);
+            assertEquals(container.getSize("dexef", "321cba"), 4);
             container.share("fexed", "abc123", "dexef", "lasagna");
             container.share("fexed", "abc123", "dexef", "lasagna");
             container.share("fexed", "abc123", "dexef", "lasagna");
@@ -151,11 +151,11 @@ public class TotalTest {
             container.share("fexed", "abc123", "dexef", "lenovo");
             container.share("fexed", "abc123", "dexef", "lenovo");
             container.remove("dexef", "321cba", "lasagna");
-            assertEquals(container.getDataN("dexef", "321cba"), 25);
+            assertEquals(container.getSize("dexef", "321cba"), 25);
             container.remove("dexef", "321cba", "lasagna");
             container.remove("dexef", "321cba", "lasagna");
             container.remove("dexef", "321cba", "lenovo");
-            assertEquals(container.getDataN("dexef", "321cba"), 22);
+            assertEquals(container.getSize("dexef", "321cba"), 22);
             container.share("dexef", "321cba", "fexed", "gabbiano");
             container.share("dexef", "321cba", "fexed", "gabbiano");
             container.share("dexef", "321cba", "fexed", "gabbiano");
@@ -163,15 +163,15 @@ public class TotalTest {
             container.share("dexef", "321cba", "fexed", "gabbiano");
             container.share("dexef", "321cba", "fexed", "gabbiano");
             container.share("dexef", "321cba", "fexed", "gabbiano");
-            assertEquals(container.getDataN("fexed", "abc123"), 13);
+            assertEquals(container.getSize("fexed", "abc123"), 13);
             container.share("arduino", "nano", "fexed", "ojyUBJaZ");
-            assertEquals(container.getDataN("fexed", "abc123"), 14);
+            assertEquals(container.getSize("fexed", "abc123"), 14);
             container.share("arduino", "nano", "dexef", "ojyUBJaZ");
-            assertEquals(container.getDataN("dexef", "321cba"), 23);
+            assertEquals(container.getSize("dexef", "321cba"), 23);
             container.share("arduino", "nano", "raspberry", "ojyUBJaZ");
-            assertEquals(container.getDataN("raspberry", "3.14159265"), 4);
+            assertEquals(container.getSize("raspberry", "3.14159265"), 4);
             container.share("arduino", "nano", "temistocle", "ojyUBJaZ");
-            assertEquals(container.getDataN("temistocle", "nonsaprei"), 2);
+            assertEquals(container.getSize("temistocle", "nonsaprei"), 2);
         } catch (SecureDataContainer.UserNotFoundException ex) {
             fail("UserNotFoundException");
         } catch (SecureDataContainer.InvalidPasswordException ex) {

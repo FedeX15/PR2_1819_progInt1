@@ -204,19 +204,6 @@ public interface SecureDataContainer<E> {
     public int getUsersN();
     //RETURNS: il numero di utenti registrati
     
-    //Ritorna il numero di dati dell'utente indicato
-    public int getDataN(String user, String passw)
-            throws UserNotFoundException,
-                   InvalidPasswordException;
-    /*
-    REQUIRES: user e passw utente valido non NULL
-    THROWS: NullPointerException (unchecked, Java) se id o passw sono NULL,
-            UserNotFoundException (unchecked, non Java) se l'utente non esiste,
-            InvalidPasswordException (unchecked, non Java) se la password è
-            sbagliata
-    RETURNS: il numero di dati dell'utente
-    */
-     
     //Lanciata se un dato non è posseduto dall'utente che tenta di usarlo
     class DataNotOwnedException extends Exception {
         public DataNotOwnedException() {
