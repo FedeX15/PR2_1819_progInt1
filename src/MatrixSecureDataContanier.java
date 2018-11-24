@@ -47,10 +47,11 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
         usrData = new int[0][0];
         usrs = new String[0];
         pwds = new String[0];
-        //data = new E[0]; //Non possibile con tipi generici, dipende dal tipo E
+        //data = new E[0]; //Non possibile con tipi generici, dipende da E
     }
     /*
-    I(c) valida poiché usrData.length = usrs.length = pwds.length = 0
+    I(c) valida poiché usrData.length = usrs.length = pwds.length = 0, quindi
+    non esistono indici i che invalidano l'invariante
     */
       
     /*
@@ -61,8 +62,9 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
             for (int j = 0; j < data.length; j++) {
                 System.out.print(" " + ((usrData[i][j] > 9) ? "+" : usrData[i][j]));
                 /*
-                stampo il numero di copie, '+' se il numero di copie è a due
-                cifre per mantenere la formattazione
+                stampo il numero di copie, o '+' se il numero di copie è a due
+                cifre (per mantenere la formattazione), il tutto preceduto da
+                uno spazio
                 */
             }
             System.out.println("\t" + usrs[i]);
@@ -70,53 +72,54 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
         }
     }
     
-    /*
-    Funzione di utilità per controllare l'esistenza di un nome utente
-    */
+    //Funzione di utilità per controllare l'esistenza di un nome utente
     public boolean checkExistingUser(String usr) {
         for (String s : usrs) {
+            //ritorno true non appena trovo un elemento in usrs che corrisponde
             if (s.equals(usr)) return true;
         }
-        return false;
+        return false; //se non l'ho trovato torno false, utente non esistente
     }
     /*
     REQUIRES: usr != null
     RETURNS: true se usr è presente in usrs, false altrimenti
     */
     
-    /*
-    Funzione di utilità per incrementare di una posizione il vettore di dati E
-    */
+    //Funzione di utilità per incrementare di una posizione un array di E
     public abstract E[] increment(E[] v);
     /*
     REQUIRES: v != null
-    RETURNS: una copia del vettore v con una posizione in più con valore null
+    RETURNS: una copia del array v con una posizione in più con valore null
     */
     
-    //Funzione di utilità per incrementare di una posizione un vettore di String
+    //Funzione di utilità per incrementare di una posizione un array di String
     public String[] increment(String[] v) {
+         //preparo il nuovo array con una posizione in più
         String[] newV = new String[v.length + 1];
         for (int i = 0; i < v.length; i++) {
-            newV[i] = v[i];
+            newV[i] = v[i]; //copio i valori del vecchio array nel nuovo array
         }
-        newV[newV.length-1] = null;
+        newV[newV.length-1] = null; //pulisco l'ultima posizione del nuovo array
         return newV;
     }
     /*
     REQUIRES: v != null
-    RETURNS: una copia del vettore v con una poszione in più con valore null
+    RETURNS: una copia del array v con una poszione in più con valore null
     */
     
     //Funzione di utilità che aggiunge una riga di 0 ad una matrice di int
     public int[][] addRow(int[][] m) {
+        //preparo la nuova matrice con una riga in più
         int[][] newM = new int[m.length+1][data.length];
         for (int i = 0; i < m.length; i++) {
             for (int j = 0; j < m[i].length; j++) {
+                //copio i vecchi valori
                 newM[i][j] = m[i][j];
             }
-            for (int j = 0; j < newM[newM.length-1].length; j++) {
-                newM[newM.length-1][j] = 0;
-            }
+        }
+        for (int j = 0; j < newM[newM.length-1].length; j++) {
+            //tutti 0 nell'ultima riga della nuova matrice
+            newM[newM.length-1][j] = 0;
         }
         return newM;
     }
@@ -127,12 +130,15 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
     
     //Funzione di utilità che aggiunge una colonna di 0 ad una matrice di int
     public int[][] addCol(int[][] m) {
+        //preparo la nuova matrice con una colonna in più
         int[][] newM = new int[m.length][data.length+1];
         for (int i = 0; i < m.length; i++) {
             for (int j = 0; j < m[i].length; j++) {
+                //copio i vecchi valori
                 newM[i][j] = m[i][j];
             }
-            newM[i][newM[i].length-1] = 0;
+            //l'ultima posizione, quella nuova, ha valore 0
+            newM[i][data.length-1] = 0;
         }
         return newM;
     }
@@ -145,72 +151,106 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
         
     @Override
     public void createUser(String id, String passw) throws InvalidUserException {
-        if (id != null && passw != null) {
-            if (!(checkExistingUser(id))) {
+        if (id != null && passw != null) { //controllo validità dei parametri
+            if (!(checkExistingUser(id))) { //se l'utente non esiste già
+                //incremento gli array usrs e pwds
                 usrs = increment(usrs);
                 pwds = increment(pwds);
+                //inserisco il nuovo utente in fondo agli array
                 usrs[usrs.length - 1] = id;
                 pwds[pwds.length - 1] = passw;
+                //aggiungo la riga del nuovo utente nella matrice usrData
                 usrData = addRow(usrData);
             } else throw new InvalidUserException();
         } else throw new NullPointerException();
     }
     /*
-    I(c) valida perché incrementa usrs, pwds e le righe di usrData insieme, e fa
-    ciò solamente se id non è già presente in usrs. Inoltre all'inserimento di
-    una nuova riga, tale riga è inizializzata a tutti 0, mantendo
-    usrData[i][j] >= 0 per ogni 0 <= i < usrs.length && 0 <= j < data.length
+    I(c) valida perché incrementa usrs, pwds e le righe di usrData
+    contemporaneamente, e lo fa solamente se id non è già presente in usrs.
+    All'inserimento di una nuova riga, tale riga è inizializzata a tutti 0,
+    mantendo usrData[i][j] >= 0 perogni 0 <= i < usrs.length
+    && 0 <= j < data.length
     */
 
     @Override
     public int getSize(String owner, String passw) throws UserNotFoundException, InvalidPasswordException {
+        //controllo la validità dei parametri
         if (owner != null && passw != null) {
-            if (checkExistingUser(owner)) {
+            if (checkExistingUser(owner)) { //se l'utente esiste
                 int n = -1;
                 for (int i = 0; i < usrs.length; i++) {
                     if (usrs[i].equals(owner)) {
-                        n = i;
+                        n = i; //trovo l'indice corrispondente
                         break;
                     }
                 }
-                if (pwds[n].equals(passw)){
+                if (pwds[n].equals(passw)){ //se la password è esatta
                     int cnt = 0;
                     for (int i = 0; i < usrData[n].length; i++) {
+                        /*
+                        sommo i conteggi presenti nella riga della matrice
+                        corrispondente ad owner
+                        */
                         cnt += usrData[n][i];
                     }
+                    /*
+                    ritorno il conteggio, che sarebbe il numore totale di dati
+                    presenti nella collezione di owner
+                    */
                     return cnt;
                 } else throw new InvalidPasswordException();
             } else throw new UserNotFoundException();
         } else throw new NullPointerException();
     }
+    /*
+    getSize è un osservatore e non va a modificare le strutture dati, pertanto
+    I(c) è valida
+    */
+    
 
     @Override
     public boolean put(String owner, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException {
+        //verifico la validità dei parametri
         if (owner != null && passw != null && data != null) {
-            if (checkExistingUser(owner)) {
+            if (checkExistingUser(owner)) { //se l'utente esiste
                 int n = -1;
                 for (int i = 0; i < usrs.length; i++) {
                     if (usrs[i].equals(owner)) {
-                        n = i;
+                        n = i; //trovo l'indice corrispondente
                         break;
                     }
                 }
-                if (pwds[n].equals(passw)){
-                    if (verifyData(data)) {
+                if (pwds[n].equals(passw)){ //se la password è esatta
+                    if (verifyData(data)) { //e se il dato è valido e verificato
                         int m = -1;
                         for (int i = 0; i < this.data.length; i++) {
                             if (this.data[i].equals(data)) {
+                                /*
+                                se il dato già esiste nel sistema allora 
+                                trovo il suo indice
+                                */
                                 m = i;
                                 break;
                             }
                         }
-                        if (m == -1) {
-                            usrData = addCol(usrData);
+                        if (m == -1) { //in questo caso è un dato nuovo
+                            //incremento l'array dei dati
                             this.data = increment(this.data);
+                            //creo una nuova colonna nella matrice
+                            usrData = addCol(usrData);
+                            //inserisco il dato nuovo nell'array dei dati
                             this.data[this.data.length-1] = data;
+                            /*
+                            incremento il conteggio del dato nella riga di
+                            owner
+                            */
                             usrData[n][this.data.length-1]++;
                             return true;
                         } else {
+                            /*
+                            il dato esiste, quindi incremento la colonna
+                            corrispondente nella riga di owner
+                            */
                             usrData[n][m]++;
                             return true;
                         }
@@ -229,28 +269,33 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
 
     @Override
     public E get(String owner, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException {
+        //preparo la shallow copy del dato
         E newdata = data;
+        //verifico la validità dei parametri
         if (owner != null && passw != null && data != null) {
-            if (checkExistingUser(owner)) {
+            if (checkExistingUser(owner)) { //se l'utente esiste
                 int n = -1;
                 for (int i = 0; i < usrs.length; i++) {
                     if (usrs[i].equals(owner)) {
-                        n = i;
+                        n = i; //trovo l'indice corrispondente
                         break;
                     }
                 }
-                if (pwds[n].equals(passw)) {
-                    if (verifyData(data)) {
+                if (pwds[n].equals(passw)) { //se la password è esatta
+                    if (verifyData(data)) { //e se il dato è valido e verificato
                         int m = -1;
                         for (int i = 0; i < this.data.length; i++) {
                             if (this.data[i].equals(data)) {
+                                /*
+                                se il dato esiste trovo l'indice corrispondente
+                                */
                                 m = i;
                                 break;
                             }
                         }
-                        if (m != -1) {
-                            if (usrData[n][m] > 0) {
-                                return newdata;
+                        if (m != -1) { //se l'indice è stato trovato
+                            if (usrData[n][m] > 0) { //e l'utente lo possiede
+                                return newdata; //ritorno la copia
                             } else throw new DataNotOwnedException();
                         } else throw new DataNotOwnedException();
                     } else throw new InvalidDataException();
@@ -258,33 +303,38 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
             } else throw new UserNotFoundException();
         } else throw new NullPointerException();
     }
+    //get è un osservatore, pertanto non va a modificare le strutture dati
 
     @Override
     public E remove(String owner, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException {
+        //verifico la validità dei parametri
         if (owner != null && passw != null && data != null) {
-            if (checkExistingUser(owner)) {
+            if (checkExistingUser(owner)) { //se l'utente esiste
                 int n = -1;
                 for (int i = 0; i < usrs.length; i++) {
                     if (usrs[i].equals(owner)) {
-                        n = i;
+                        n = i; //trovo il suo indice
                         break;
                     }
                 }
-                if (pwds[n].equals(passw)) {
-                    int m = -1;
-                    if (verifyData(data)) {
+                if (pwds[n].equals(passw)) { //se la password è esatta
+                    if (verifyData(data)) { //e se il dato è valido e verificato
+                        int m = -1;
                         for (int i = 0; i < this.data.length; i++) {
                             if (this.data[i].equals(data)) {
+                                /*
+                                se il dato esiste trovo l'indice corrispondente
+                                */
                                 m = i;
                                 break;
                             }
                         }
-                        if (m != -1) {
-                            if (usrData[n][m] > 0) {
-                                usrData[n][m]--;
+                        if (m != -1) { //se l'indice è stato trovato
+                            if (usrData[n][m] > 0) { //e l'utente lo possiede
+                                usrData[n][m]--; //ne elimino una copia
                                 return data;
                             } else throw new DataNotOwnedException();
-                        } else throw new InvalidDataException();
+                        } else throw new DataNotOwnedException();
                     } else throw new InvalidDataException();
                 } else throw new InvalidPasswordException();
             } else throw new UserNotFoundException();
@@ -299,26 +349,32 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
 
     @Override
     public void copy(String owner, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException {
+        //verifico la validità dei parametri
         if (owner != null && passw != null && data != null) {
-            if (checkExistingUser(owner)) {
+            if (checkExistingUser(owner)) { //se l'utente esiste
                 int n = -1;
                 for (int i = 0; i < usrs.length; i++) {
                     if (usrs[i].equals(owner)) {
-                        n = i;
+                        n = i; //trovo il rispettivo indice
                         break;
                     }
                 }
-                if (pwds[n].equals(passw)){
-                    if (verifyData(data)) {
+                if (pwds[n].equals(passw)){ //se la password è esatta
+                    if (verifyData(data)) { //e se il dato è valido e verificato
                         int m = -1;
                         for (int i = 0; i < this.data.length; i++) {
                             if (this.data[i].equals(data)) {
-                                m = i;
+                                m = i; //trovo il rispettivo indice
                                 break;
                             }
                         }
                         if (m != -1) {
+                            //verifico che owner possieda il dato
                             if (usrData[n][m] > 0) {
+                                /*
+                                e in caso incremento il conteggio nella riga
+                                di owner
+                                */
                                 usrData[n][m]++;
                             } else throw new DataNotOwnedException();
                         } else throw new InvalidDataException();
@@ -335,34 +391,40 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
 
     @Override
     public void share(String owner, String passw, String other, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException {
+        //verifico la validità dei parametri
         if (owner != null && passw != null && data != null) {
-            if (checkExistingUser(owner)) {
+            if (checkExistingUser(owner)) { //se l'utente esiste
                 int n = -1;
                 for (int i = 0; i < usrs.length; i++) {
                     if (usrs[i].equals(owner)) {
-                        n = i;
+                        n = i; //trovo il rispettivo indice
                         break;
                     }
                 }
-                if (pwds[n].equals(passw)){
-                    if (checkExistingUser(other)) {
+                if (pwds[n].equals(passw)){ //se la password è corretta
+                    if (checkExistingUser(other)) { //verifico che other esista
                         int o = -1;
                         for (int i = 0; i < usrs.length; i++) {
                             if (usrs[i].equals(other)) {
-                                o = i;
+                                o = i; //trovo il rispettivo indice
                                 break;
                             }
                         }
-                        if (verifyData(data)) {
+                        if (verifyData(data)) { //se data è valido e verificato
                             int m = -1;
                             for (int i = 0; i < this.data.length; i++) {
                                 if (this.data[i].equals(data)) {
-                                    m = i;
+                                    m = i; //trovo il rispettivo indice
                                     break;
                                 }
                             }
                             if (m != -1) {
+                                //se owner possiede data in almeno una copia
                                 if (usrData[n][m] > 0) {
+                                    /*
+                                    incremento il contatore di data nella riga
+                                    di other
+                                    */
                                     usrData[o][m]++;
                                 } else throw new DataNotOwnedException();
                             } else throw new InvalidDataException();
@@ -380,16 +442,17 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
 
     @Override
     public Iterator<E> getIterator(String owner, String passw) throws UserNotFoundException, InvalidPasswordException {
+        //verifico la validità dei parametri
         if (owner != null && passw != null && data != null) {
-            if (checkExistingUser(owner)) {
+            if (checkExistingUser(owner)) { //se l'utente esiste
                 int n = -1;
                 for (int i = 0; i < usrs.length; i++) {
                     if (usrs[i].equals(owner)) {
-                        n = i;
+                        n = i; //trovo l'indice corrispondente
                         break;
                     }
                 }
-                if (pwds[n].equals(passw)){
+                if (pwds[n].equals(passw)){ //se la password è esatta
                     final int[] datausr = usrData[n]; //preparo vettore delle quantità
                     final E[] data = this.data; //preparo il vettore dei dati
                     return new Iterator<E>() {
@@ -426,17 +489,18 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
 
     @Override
     public boolean verifyUser(String user, String passw) throws UserNotFoundException, InvalidPasswordException {
+        //verifico la validità dei parametri
         if (user != null && passw != null && data != null) {
-            if (checkExistingUser(user)) {
+            if (checkExistingUser(user)) { //se l'utente esiste
                 int n = -1;
                 for (int i = 0; i < usrs.length; i++) {
                     if (usrs[i].equals(user)) {
-                        n = i;
+                        n = i; //trovo l'indice corrispondente
                         break;
                     }
                 }
-                if (pwds[n].equals(passw)){
-                    return true;
+                if (pwds[n].equals(passw)){ //se la password è esatta
+                    return true; //tutto ok, utente verificato
                 } else throw new InvalidPasswordException();
             } else throw new UserNotFoundException();
         } else throw new NullPointerException();
@@ -444,29 +508,28 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
 
     @Override
     public boolean verifyOwnership(String user, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException {
+        //verifico la validità dei dati
         if (user != null && passw != null && data != null) {
-            if (checkExistingUser(user)) {
+            if (verifyUser(user, passw)) { //se l'utente esiste
                 int n = -1;
                 for (int i = 0; i < usrs.length; i++) {
                     if (usrs[i].equals(user)) {
-                        n = i;
+                        n = i; //trovo l'indice corrispondente
                         break;
                     }
                 }
-                if (pwds[n].equals(passw)){
-                    if (verifyData(data)) {
-                        int m = -1;
-                        for (int i = 0; i < this.data.length; i++) {
-                            if (this.data[i].equals(data)) {
-                                m = i;
-                                break;
-                            }
+                if (verifyData(data)) { //se il dato è verificato e valido
+                    int m = -1;
+                    for (int i = 0; i < this.data.length; i++) {
+                        if (this.data[i].equals(data)) {
+                            m = i; //trovo l'indice corrispondente
+                            break;
                         }
-                        if (m != -1) {
-                            return usrData[n][m] > 0;
-                        } else throw new InvalidDataException();
+                    }
+                    if (m != -1) { //se l'ho trovato
+                        return usrData[n][m] > 0; //true se ho almeno una copia
                     } else throw new InvalidDataException();
-                } else throw new InvalidPasswordException();
+                } else throw new InvalidDataException();
             } else throw new UserNotFoundException();
         } else throw new NullPointerException();
     }
@@ -474,25 +537,5 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
     @Override
     public int getUsersN() {
         return usrs.length;
-    }
-
-    @Override
-    public int getDataN(String user, String passw) throws UserNotFoundException, InvalidPasswordException {
-       if (checkExistingUser(user)) {
-            int n = -1;
-            for (int i = 0; i < usrs.length; i++) {
-                if (usrs[i].equals(user)) {
-                    n = i;
-                    break;
-                }
-            }
-            if (pwds[n].equals(passw)){
-                int sum = 0;
-                for (int i = 0; i < data.length; i++) {
-                    sum += usrData[n][i];
-                }
-                return sum;
-            } else throw new InvalidPasswordException();
-        } else throw new UserNotFoundException();
     }
 }
