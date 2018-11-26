@@ -69,13 +69,7 @@ public class TotalTest {
             container.createUser("arduino", "nano");
             container.createUser("raspberry", "3.14159265");
             container.createUser("temistocle", "nonsaprei");
-            container.createUser("a", "a");
-            container.createUser("b", "b");
-            container.createUser("c", "c");
-            container.createUser("d", "d");
-            container.createUser("e", "e");
-            assertEquals(container.getUsersN(), 10);
-            
+            assertEquals(container.getUsersN(), 5);
         } catch (SecureDataContainer.InvalidUserException ex) {
             fail("Errore su utenti che vanno bene");
         }
@@ -189,7 +183,7 @@ public class TotalTest {
             container.createUser("dexef", "asdasd");
             fail("No errore su utenti che non vanno bene");
         } catch (SecureDataContainer.InvalidUserException ex) {
-            assertEquals(container.getUsersN(), 10);
+            assertEquals(container.getUsersN(), 5);
         }
         
         try {
@@ -249,6 +243,16 @@ public class TotalTest {
     }
     
     public void addBigData(SecureDataContainer<String> container) {
+        try {
+            container.createUser("a", "a");
+            container.createUser("b", "b");
+            container.createUser("c", "c");
+            container.createUser("d", "d");
+            container.createUser("e", "e");
+            assertEquals(container.getUsersN(), 10);
+        } catch (SecureDataContainer.InvalidUserException ex) {
+            fail("Errore su utenti che vanno bene");
+        }
         try {
             container.put("fexed", "abc123", "LGUrXMltBy");
             container.put("b", "b", "T3zSsRa5BX");
@@ -351,11 +355,11 @@ public class TotalTest {
             container.put("b", "b", "EXpZmME00Y");
             container.put("a", "a", "JYDTyl0Iq1");
         } catch (SecureDataContainer.UserNotFoundException ex) {
-            fail("UserNotFoundException sul primo try");
+            fail("UserNotFoundException");
         } catch (SecureDataContainer.InvalidPasswordException ex) {
-            fail("InvalidPasswordException sul primo try");
+            fail("InvalidPasswordException");
         } catch (SecureDataContainer.InvalidDataException ex) {
-            fail("InvalidDataException sul primo try");
+            fail("InvalidDataException");
         }
         
     }

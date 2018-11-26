@@ -156,7 +156,7 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
         for (int i = 0; i < usrs.length; i++) {
             if (usrs[i].equals(user)) {
                 n = i; //trovo l'indice corrispondente
-                i = usrs.length; //esco dal ciclo
+                break; //esco dal ciclo
             }
         }
         return n;
@@ -172,7 +172,7 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
         for (int i = 0; i < this.data.length; i++) {
             if (this.data[i].equals(data)) {
                 m = i; //trovo l'indice corrispondente
-                i = usrs.length; //esco dal ciclo
+                break; //esco dal ciclo
             }
         }
         return m;
