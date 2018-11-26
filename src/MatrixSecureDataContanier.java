@@ -74,11 +74,12 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
     
     //Funzione di utilità per controllare l'esistenza di un nome utente
     public boolean checkExistingUser(String usr) {
+        boolean found = false;
         for (String s : usrs) {
-            //ritorno true non appena trovo un elemento in usrs che corrisponde
-            if (s.equals(usr)) return true;
+            //true non appena trovo un elemento in usrs che corrisponde ad usr
+            if (s.equals(usr)) found = true;
         }
-        return false; //se non l'ho trovato torno false, utente non esistente
+        return found; //se non l'ho trovato torno false, utente non esistente
     }
     /*
     REQUIRES: usr != null
@@ -155,7 +156,7 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
         for (int i = 0; i < usrs.length; i++) {
             if (usrs[i].equals(user)) {
                 n = i; //trovo l'indice corrispondente
-                break;
+                i = usrs.length; //esco dal ciclo
             }
         }
         return n;
@@ -171,7 +172,7 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
         for (int i = 0; i < this.data.length; i++) {
             if (this.data[i].equals(data)) {
                 m = i; //trovo l'indice corrispondente
-                break;
+                i = usrs.length; //esco dal ciclo
             }
         }
         return m;
@@ -455,6 +456,7 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
             } else throw new UserNotFoundException();
         } else throw new NullPointerException();
     }
+    //getIterator non va a modificare le strutture dati
 
     @Override
     public boolean verifyUser(String user, String passw) throws UserNotFoundException, InvalidPasswordException {
@@ -468,6 +470,7 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
             } else throw new UserNotFoundException();
         } else throw new NullPointerException();
     }
+    //verifyUser non va a modificare le strutture dati
 
     @Override
     public boolean verifyOwnership(String user, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException {
@@ -484,9 +487,11 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
             } else throw new UserNotFoundException();
         } else throw new NullPointerException();
     }
+    //verifyOwnership non va a modificare le strutture dati
 
     @Override
     public int getUsersN() {
         return usrs.length;
     }
+    //getUsersN non va a modificare le strutture dati
 }
