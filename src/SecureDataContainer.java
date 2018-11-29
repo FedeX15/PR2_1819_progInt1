@@ -142,7 +142,7 @@ public interface SecureDataContainer<E> {
             InvalidDataException (unchecked, non Java) se il dato è invalido o è
             NULL
     EFFECTS: viene effettuata una copia di data all'interno della collezione
-             di other
+             di other se data è posseduto da owner
     MODIFIES: la collezione di other
     */
     
