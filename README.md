@@ -19,5 +19,5 @@ fornendo le	motivazioni delle	scelte	effettuate.
 implementazioni	 che	 utilizzano	 differenti	 strutture	 di	 supporto**.	 In	 entrambi	 i	 casi	 si devono
 comunque	descrivere	sia	la	funzione	di	astrazione	sia	l’invariante	di	rappresentazione.	 Si	discutano
 le	caratteristiche	delle	due	implementazioni.
-3. [ ] Per	 valutare	 il	 comportamento	 dell’implementazioni proposte **si	 realizzi una	 batteria	 di	 test	 in	 grado	 di	
-operare,	senza	modifiche	specifiche,	su	entrambe	le	implementazioni	proposte**.
+3. [X] Per	 valutare	 il	 comportamento	 dell’implementazioni proposte **si	 realizzi una	 batteria	 di	 test	 in	 grado	 di operare,	senza	modifiche	specifiche,	su	entrambe	le	implementazioni	proposte**.
+4. [ ] Scrivere una relazione di massimo due pagine

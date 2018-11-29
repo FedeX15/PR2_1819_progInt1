@@ -80,6 +80,7 @@ public abstract class HashMapSecureDataContainer<E> implements SecureDataContain
             } else throw new UserNotFoundException();
         } else throw new NullPointerException();
     }
+    //getSize è un osservatore e non va a modificare le strutture dati
 
     @Override
     public boolean put(String owner, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException {
@@ -167,7 +168,7 @@ public abstract class HashMapSecureDataContainer<E> implements SecureDataContain
 
     @Override
     public void copy(String owner, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException, DataNotOwnedException {
-        
+        //preparo la shallow copy
         E dataCopy = data;
         //verifico la validità dei parametri
         if (owner != null && passw != null && data != null) {
@@ -242,6 +243,7 @@ public abstract class HashMapSecureDataContainer<E> implements SecureDataContain
             } else throw new UserNotFoundException();
         } else throw new NullPointerException();
     }
+    //getIterator non va a modificare le strutture dati
 
     @Override
     public boolean verifyUser(String user, String passw) throws UserNotFoundException, InvalidPasswordException {
@@ -257,6 +259,7 @@ public abstract class HashMapSecureDataContainer<E> implements SecureDataContain
             } else throw new UserNotFoundException();
         } else throw new NullPointerException();
     }
+    //verifyUser non va a modificare le strutture dati
 
     @Override
     public boolean verifyOwnership(String user, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException {
@@ -276,6 +279,7 @@ public abstract class HashMapSecureDataContainer<E> implements SecureDataContain
             } else throw new UserNotFoundException();
         } else throw new NullPointerException();
     }
+    //verifyOwnership non va a modificare le strutture dati
 
     @Override
     public int getUsersN() {

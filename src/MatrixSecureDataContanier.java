@@ -74,11 +74,12 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
     
     //Funzione di utilità per controllare l'esistenza di un nome utente
     public boolean checkExistingUser(String usr) {
+        boolean found = false;
         for (String s : usrs) {
-            //ritorno true non appena trovo un elemento in usrs che corrisponde
-            if (s.equals(usr)) return true;
+            //true non appena trovo un elemento in usrs che corrisponde ad usr
+            if (s.equals(usr)) found = true;
         }
-        return false; //se non l'ho trovato torno false, utente non esistente
+        return found; //se non l'ho trovato torno false, utente non esistente
     }
     /*
     REQUIRES: usr != null
@@ -155,7 +156,7 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
         for (int i = 0; i < usrs.length; i++) {
             if (usrs[i].equals(user)) {
                 n = i; //trovo l'indice corrispondente
-                break;
+                break; //esco dal ciclo
             }
         }
         return n;
@@ -171,7 +172,7 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
         for (int i = 0; i < this.data.length; i++) {
             if (this.data[i].equals(data)) {
                 m = i; //trovo l'indice corrispondente
-                break;
+                break; //esco dal ciclo
             }
         }
         return m;
@@ -397,31 +398,56 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
             if (checkExistingUser(owner)) { //se l'utente esiste
                 int n = getUserIndex(owner);
                 if (pwds[n].equals(passw)){ //se la password è esatta
-                    final int[] datausr = usrData[n]; //preparo vettore delle quantità
-                    final E[] data = this.data; //preparo il vettore dei dati
+                     //preparo vettore delle quantità
+                    final int[] datausr = usrData[n];
+                    //preparo il vettore dei dati
+                    final E[] data = this.data;
                     return new Iterator<E>() {
                         int i = -1; //base -1, al primo hasNext va a 0
                         int c = 0; //memorizza il conteggio del singolo dato
                         
                         @Override
                         public boolean hasNext() {
-                            if (c > 0) return c <= datausr[i]; //finché di questo dato l'utente ha copie devo ritornare questo dato
+                             /*
+                            finché di questo dato l'utente ha copie devo
+                            ritornare questo dato
+                            */
+                            if (c > 0) return c <= datausr[i];
                             else {
-                                i++; //vado a vedere dalla posizione successiva il primo conteggio > 0
+                                /*
+                                dalla posizione successiva vado a cercare il
+                                primo conteggio > 0
+                                */
+                                i++;
                                 do {
                                     if (i < data.length) {
                                         c = datausr[i];
-                                        if (c > 0) return true; //se il conteggio è > 0 allora ok, ci sono dati da tornare e sono in posizione i
-                                        else i++; //altrimenti vado a vedere il dato successivo
+                                        /*
+                                        se il conteggio è > 0 allora ok, ci sono
+                                        dati da tornare e sono in posizione i
+                                        */
+                                        if (c > 0) return true;
+                                        //altrimenti vado al dato successivo
+                                        else i++;
                                     }
-                                } while (i < data.length); //lo faccio per tutti i dati
-                                return false; //se arrivo qua non ci sono più dati o conteggi >0 nella collezione dell'utente, non ho dati successivi
+                                } while (i < data.length);
+                                /*
+                                lo faccio per tutti i dati, se arrivo qua non ci
+                                sono più dati o non ci sono più conteggi > 0
+                                nella collezione dell'utente,
+                                quindi non ho dati successivi
+                                */
+                                return false;
                             }
                         }
 
                         @Override
                         public E next() {
-                            c--; //decremento il conteggio di questo dato che è sicuramente > 0
+                            /*
+                            decremento il conteggio di questo dato che è
+                            sicuramente > 0
+                            */
+                            c--;
                             return data[i]; //ritorno il dato
                             
                         }
@@ -430,6 +456,7 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
             } else throw new UserNotFoundException();
         } else throw new NullPointerException();
     }
+    //getIterator non va a modificare le strutture dati
 
     @Override
     public boolean verifyUser(String user, String passw) throws UserNotFoundException, InvalidPasswordException {
@@ -443,6 +470,7 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
             } else throw new UserNotFoundException();
         } else throw new NullPointerException();
     }
+    //verifyUser non va a modificare le strutture dati
 
     @Override
     public boolean verifyOwnership(String user, String passw, E data) throws UserNotFoundException, InvalidPasswordException, InvalidDataException {
@@ -459,9 +487,11 @@ public abstract class MatrixSecureDataContanier<E> implements SecureDataContaine
             } else throw new UserNotFoundException();
         } else throw new NullPointerException();
     }
+    //verifyOwnership non va a modificare le strutture dati
 
     @Override
     public int getUsersN() {
         return usrs.length;
     }
+    //getUsersN non va a modificare le strutture dati
 }
