@@ -148,19 +148,12 @@ public abstract class HashMapSecureDataContainer<E> implements SecureDataContain
                 if (usrPwd.get(owner).equals(passw)) {
                     //verifico se data è un dato valido
                     if (verifyData(data)) {
-                        /*
-                        vado a cercare la prima occorrenza di data
-                        nell'ArrayList di owner
-                        */
-                        for (int i = 0; i < usrData.get(owner).size(); i++) {
-                            if (usrData.get(owner).get(i).equals(data)) {
-                                //rimuovo la prima occorrenza che trovo e torno
-                                usrData.get(owner).remove(i);
-                                return datacopy;
-                            }
-                        }
-                        //altrimenti il dato non è posseduto, non rimuovo nulla
-                        throw new DataNotOwnedException();
+                        //verifico che l'utente possieda il dato
+                        if (usrData.get(owner).contains(data)) {
+                            //ed in caso lo rimuovo, ritornando la copia
+                            usrData.get(owner).remove(data);
+                            return datacopy;
+                        } else throw new DataNotOwnedException();
                     } else throw new InvalidDataException();
                 } else throw new InvalidPasswordException();
             } else throw new UserNotFoundException();
